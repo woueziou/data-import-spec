@@ -6,28 +6,10 @@ Current version: `0.1.2`
 
 ## Install
 
-From inside the target repo:
+Install directly from the GitHub repo:
 
 ```bash
-/path/to/data-ingestion/scripts/install.sh
-```
-
-Or from the framework repo:
-
-```bash
-./scripts/install.sh /path/to/target-repo
-```
-
-If the framework is hosted on GitHub, you can install from a tagged release:
-
-```bash
-./scripts/install-from-github.sh --repo owner/name --ref v0.1.2 .
-```
-
-Or directly from the target repo without cloning this framework first:
-
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/owner/name/v0.1.2/scripts/install-from-github.sh) --repo owner/name --ref v0.1.2 .
+bash <(curl -fsSL https://raw.githubusercontent.com/woueziou/data-import-spec/main/scripts/install-from-github.sh) --repo woueziou/data-import-spec --ref main .
 ```
 
 If the target repo already has `AGENTS.md` or `GEMINI.md`, re-run with
