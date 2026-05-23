@@ -2,7 +2,7 @@
 set -euo pipefail
 
 usage() {
-  printf 'Usage: %s [--force] <target-repo>\n' "${0##*/}"
+  printf 'Usage: %s [--force] [target-repo]\n' "${0##*/}"
 }
 
 if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
@@ -17,20 +17,28 @@ if [[ "${1:-}" == "--force" ]]; then
   shift
 fi
 
-if [[ $# -ne 1 ]]; then
+if [[ $# -gt 1 ]]; then
   usage
   exit 1
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-TARGET_DIR="$1"
+TARGET_DIR="${1:-.}"
 MANIFEST="$REPO_DIR/install/manifest.txt"
 VERSION="$(tr -d ' \t\r\n' < "$REPO_DIR/VERSION")"
 INSTALLED_AT="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+SOURCE_MODE="${DMP_SOURCE_MODE:-local}"
+SOURCE_REPO="${DMP_SOURCE_REPO:-$REPO_DIR}"
+SOURCE_REF="${DMP_SOURCE_REF:-local}"
 
 mkdir -p "$TARGET_DIR"
 TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
+IS_REINSTALL=0
+
+if [[ -f "$TARGET_DIR/.dmp/source-repo.txt" ]]; then
+  IS_REINSTALL=1
+fi
 
 if [[ "$TARGET_DIR" == "$REPO_DIR" ]]; then
   printf 'Target repo matches the source repo. Nothing to install.\n'
@@ -39,7 +47,7 @@ fi
 
 guard_root_file() {
   local path="$1"
-  if [[ -e "$TARGET_DIR/$path" && "$FORCE" -ne 1 ]]; then
+  if [[ -e "$TARGET_DIR/$path" && "$FORCE" -ne 1 && "$IS_REINSTALL" -ne 1 ]]; then
     printf 'Refusing to overwrite %s. Re-run with --force if you want to replace it.\n' "$TARGET_DIR/$path"
     exit 1
   fi
@@ -76,8 +84,15 @@ cat > "$TARGET_DIR/.dmp/install.json" <<EOF
 {
   "name": "dmp",
   "version": "$VERSION",
-  "installedAt": "$INSTALLED_AT"
+  "installedAt": "$INSTALLED_AT",
+  "sourceMode": "$SOURCE_MODE",
+  "sourceRepo": "$SOURCE_REPO",
+  "sourceRef": "$SOURCE_REF"
 }
 EOF
+
+printf '%s\n' "$SOURCE_MODE" > "$TARGET_DIR/.dmp/source-mode.txt"
+printf '%s\n' "$SOURCE_REPO" > "$TARGET_DIR/.dmp/source-repo.txt"
+printf '%s\n' "$SOURCE_REF" > "$TARGET_DIR/.dmp/source-ref.txt"
 
 printf 'Installed dmp %s to %s\n' "$VERSION" "$TARGET_DIR"
