@@ -79,6 +79,10 @@ while IFS='|' read -r src dest; do
   fi
 done < "$MANIFEST"
 
+if [[ -x "$TARGET_DIR/dmp/bin/init-state.sh" ]]; then
+  "$TARGET_DIR/dmp/bin/init-state.sh"
+fi
+
 mkdir -p "$TARGET_DIR/.dmp"
 cat > "$TARGET_DIR/.dmp/install.json" <<EOF
 {

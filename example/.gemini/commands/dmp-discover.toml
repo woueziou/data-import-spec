@@ -1,0 +1,4 @@
+description = "Inventory and profile the raw data source."
+prompt = """
+Follow `dmp/agents/discover.md` and keep the response structured.
+"""

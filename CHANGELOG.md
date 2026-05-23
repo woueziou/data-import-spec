@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.3
+
+- Added `_dmp_out/` as the shared workflow state folder in target repos
+- Added `dmp/bin/init-state.sh` and `dmp/bin/start-workflow.sh`
+- Added workflow templates for `context`, `searches`, `tasks`, `decisions`, and `next-step`
+- Updated intake guidance so the first workflow step writes persistent handoff state
+
 ## 0.1.2
 
 - Added `scripts/install-from-github.sh` for GitHub-hosted installs
