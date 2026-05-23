@@ -2,15 +2,17 @@
 
 This repo packages a reusable `dmp` workflow for undocumented data sources.
 
-Current version: `0.1.3`
+Current version: `0.1.6`
 
 ## Install
 
-Install directly from the GitHub repo:
+Install with `npx`:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/woueziou/data-import-spec/main/scripts/install-from-github.sh) --repo woueziou/data-import-spec --ref main .
+npx @data-import-spec/cli@latest
 ```
+
+Run it from inside the target repo, or pass a target path as the last argument.
 
 If the target repo already has `AGENTS.md` or `GEMINI.md`, re-run with
 `--force` or merge those files manually first.

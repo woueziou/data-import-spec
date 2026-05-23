@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.1.6
+
+- Renamed the npm package to `@data-import-spec/cli`
+- Updated the documented `npx` install command to `npx @data-import-spec/cli@latest`
+- Added `publishConfig.access=public` for package publishing
+
+## 0.1.5
+
+- Renamed the npm package to `data-import-spec`
+- Updated the documented `npx` install command to `npx data-import-spec@latest`
+
+## 0.1.4
+
+- Added an npm package entrypoint for `npx @woueziou/data-import-spec@latest`
+- Added `bin/dmp.js` as the publishable installer wrapper
+- Prepared the repo for package publishing with `package.json`
+
 ## 0.1.3
 
 - Added `_dmp_out/` as the shared workflow state folder in target repos

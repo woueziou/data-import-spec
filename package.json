@@ -1,0 +1,33 @@
+{
+  "name": "@data-import-spec/cli",
+  "version": "0.1.6",
+  "description": "DMP data import framework for undocumented sources",
+  "license": "MIT",
+  "bin": {
+    "dmp": "./bin/dmp.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "GEMINI.md",
+    "README.md",
+    "VERSION",
+    "bin",
+    "docs",
+    "dmp",
+    "example/README.md",
+    "install",
+    "scripts",
+    ".claude",
+    ".gemini",
+    ".github",
+    ".kilo",
+    "_agents"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}
