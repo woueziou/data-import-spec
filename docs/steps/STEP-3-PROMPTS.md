@@ -20,6 +20,9 @@ Generate a provisional schema as a JSON array. Each element must have:
 
 For enum candidates, also add an enumValues array listing all observed
 distinct values.
+
+Also state how many sample rows these inferences are based on and mark any
+field-level assumption that is weak because of limited sample size.
 ```
 
 ---
@@ -41,6 +44,84 @@ Generate:
    of validation errors
 
 Use `type ValidationResult = { valid: boolean; errors: string[] }`
+```
+
+---
+
+## Prompt D — Generate a parser specification from schema and sample facts
+
+```
+I have an undocumented data sample and a provisional schema.
+
+Schema:
+<paste schema JSON or markdown>
+
+Sample facts:
+<paste file name, file-name hints, likely data nature, confidence, file format, delimiter/layout, row count, header info, anomalies>
+
+Target database:
+<paste target relational database>
+
+Generate a parser specification that includes:
+1. The parser runtime interface: it must accept an input file path and an output folder path
+2. Record boundary rules
+3. Field extraction rules in source order
+4. Normalization rules (trim, null handling, date/number parsing)
+5. Validation and quarantine behavior
+6. What this sample size can and cannot prove
+7. The parsed output shape that will be easiest to load into the target relational database
+
+Do not generate SQL.
+```
+
+---
+
+## Prompt E — Generate a parser output contract
+
+```
+I have an undocumented data sample and a parser specification.
+
+Parser specification:
+<paste parser specification>
+
+Generate an output contract that includes:
+1. The assumption that the parser receives an output folder path at runtime
+2. Output folder layout beneath that output folder path
+3. Output file names
+4. Which files are JSON arrays vs JSONL
+5. Parsed-record output schema
+6. Rejected-row output schema
+7. Run-summary output schema
+8. Any metadata fields needed to make relational loading easier
+
+Assume the parser may emit both logs and `.json` / `.jsonl` files.
+
+Do not generate SQL.
+```
+
+---
+
+## Prompt F — Generate a parser logging contract
+
+```
+I have an undocumented data sample and a parser specification.
+
+Parser specification:
+<paste parser specification>
+
+Generate a logging contract that includes:
+1. The assumption that logs are written under the provided output folder path
+2. Log files to emit
+3. Structured log event fields
+4. Severity levels
+5. Per-file summary events
+6. Per-run summary events
+7. Parse error and quarantine log events
+8. Minimal examples of each log event type
+
+Assume the parser is implemented in TypeScript.
+
+Do not generate SQL.
 ```
 
 ---

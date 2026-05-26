@@ -8,9 +8,16 @@ I need to start a data import workflow.
 Ask me for the exact target data path or location first.
 If I only give a vague description, keep asking until you have:
 - file/folder/bucket/URL/database location
+- target relational database
 - source name
 - access mode
 - sample path
+
+Then ask for any schema-shaping preferences that should be honored later, such as:
+- naming convention for tables/columns
+- singular vs plural entity naming
+- timestamp/date format expectations
+- ID/key naming style
 ```
 
 ---
@@ -25,9 +32,11 @@ Using this target data information:
 Create a short intake note with:
 - source name
 - target location
+- target database
 - access mode
 - owner
 - sample path
+- schema preferences
 - risks
 - next agent to run
 ```
@@ -43,7 +52,9 @@ Summarize this target source for the next DMP agent.
 
 Return:
 - target location
+- target database
 - source type
+- schema preferences
 - known constraints
 - missing info
 - next step

@@ -1,5 +1,5 @@
 # Gemini CLI
 
-Read `AGENTS.md` and `docs/framework.md` first.
+Read `AGENTS.md` and `dmp/framework.md` first.
 
-Use `/dmp-intake` to start, and ask for the target data path if it is missing.
+If `dmp-intake` is installed, use it to start and ask for the target data path if it is missing.

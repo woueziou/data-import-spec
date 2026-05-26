@@ -2,41 +2,55 @@
 
 This repo packages a reusable `dmp` workflow for undocumented data sources.
 
-Current version: `0.1.6`
+Current version: `0.1.7`
 
 ## Install
 
 Install with `npx`:
 
 ```bash
-npx @data-import-spec/cli@latest
+npx @petadata/parser@latest
 ```
 
 Run it from inside the target repo, or pass a target path as the last argument.
+The installer asks which agents you want and only installs those selections.
 
 If the target repo already has `AGENTS.md` or `GEMINI.md`, re-run with
 `--force` or merge those files manually first.
 
 ## What it installs
 
-- `docs/` with the methodology and step docs
-- `dmp/agents/` with shared agent specs
-- `_dmp_out/` as the shared workflow state folder
+- `dmp/framework.md`
+- selected `dmp/agents/` specs
 - `dmp/bin/init-state.sh` and `dmp/bin/start-workflow.sh`
 - `dmp/bin/reinstall.sh` for re-running install from the target repo
-- `dmp/version.json` and `.dmp/install.json` for version tracking
+- `dmp/version.json` and `dmp/install.json` for version tracking
 - `AGENTS.md` and `GEMINI.md`
-- tool surfaces for Copilot, Gemini CLI, Antigravity, Kilo, and `cmd`
+- selected tool surfaces for Copilot, Gemini CLI, Antigravity, Kilo, and `cmd`
+
+## What it does not install
+
+- `docs/`
+- `example/`
+- `.dmp/`
+- `_dmp_output/`
+
+`_dmp_output/` is created on first use of `/dmp-intake`.
 
 ## Start A Workflow
 
-From the target repo, create a workflow state folder before deeper analysis:
+Start with `/dmp-intake`.
+
+On first use, it should create `_dmp_output/` and `_dmp_output/<workflow-id>/`
+before deeper analysis.
+
+If you want to create the workflow folder manually, you can still run:
 
 ```bash
 ./dmp/bin/start-workflow.sh order_file "Order file parser"
 ```
 
-That creates `_dmp_out/order_file/` with:
+That creates `_dmp_output/order_file/` with:
 - `context.md`
 - `searches.md`
 - `tasks.md`
@@ -59,10 +73,14 @@ That path is intended for updates of an existing DMP install.
 ## Entry points
 
 - Start with `/dmp-intake`
+- `/dmp-intake` should create `_dmp_output/<workflow-id>/` if it does not exist yet
 - If the target path or location is missing, ask for it first
-- Use `_dmp_out/<workflow-id>/` as the source of truth for handoff and resume
-- Use [docs/framework.md](docs/framework.md) as the workflow map
-- Use [docs/README.md](docs/README.md) as the docs index
+- Ask for the target relational database during intake
+- During intake, ask for schema-shaping preferences such as naming conventions if they matter downstream
+- Require parser handoff artifacts: `parser-spec.md`, `output-contract.md`, `logging-contract.md`
+- At the final handoff, ask which language to use for the parser and where to create the script
+- Use `_dmp_output/<workflow-id>/` as the source of truth for handoff and resume
+- Use `dmp/framework.md` as the workflow map inside installed repos
 
 ## Example Sandbox
 

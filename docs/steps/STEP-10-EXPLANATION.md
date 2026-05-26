@@ -2,9 +2,9 @@
 
 ## What this step is
 
-You now have enough information to design the actual database. The goal is
-a model that is faithful to the data, usable by consumers, and flexible
-enough to evolve.
+You now have enough information to design how parsed records should land in the
+actual database. The goal is a model that is faithful to the data, usable by
+consumers, and flexible enough to evolve.
 
 ## Why it matters
 
@@ -62,7 +62,11 @@ Add indexes for:
 
 ## Output of this step
 
-- Final DDL for all tables (raw, standardized, serving layer)
-- Index definitions
-- Foreign key constraints
+- A relational storage plan for raw, parsed, and serving layers
+- Keys and relationship decisions
+- A parser-to-database mapping that makes loading straightforward
+- The expected parser runtime inputs: input file path and output folder path
+- A note showing how parser output files feed the relational load step
 - A brief justification for each major design decision
+
+Only generate SQL, DDL, or migrations if the user explicitly asks for them.

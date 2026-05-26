@@ -82,6 +82,6 @@ artifacts.
 | Data dictionary | 7 |
 | Drift detector | 8 |
 | Consumer requirements table | 9 |
-| Database DDL | 10 |
+| Relational storage plan | 10 |
 | Quality rule engine | 11 |
 | Quarantine table | 11 |

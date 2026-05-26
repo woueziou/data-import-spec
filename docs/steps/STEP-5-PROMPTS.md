@@ -1,52 +1,42 @@
 # Step 5 — AI Prompts
 
-## Prompt A — Generate raw layer table DDL
+## Prompt A — Generate a raw layer storage definition
 
 ```
 I have a data source called <source-name> with the following provisional schema:
 
 <paste schema>
 
-Generate a SQL CREATE TABLE statement for the raw storage layer. Requirements:
-- Table name: raw_<source_name>
-- Column: id (UUID primary key, auto-generated)
-- Column: raw_content (TEXT — the original unparsed line or record)
-- Column: source_name (VARCHAR(100) NOT NULL)
-- Column: source_file (VARCHAR(500) — original filename)
-- Column: source_record_id (VARCHAR(200) — ID from the source if detectable)
-- Column: ingested_at (TIMESTAMPTZ NOT NULL DEFAULT now())
-- Column: batch_id (UUID — groups records from the same file import)
-- No other columns
+Generate a storage definition for the raw layer. Requirements:
+- logical table name: raw_<source_name>
+- fields: id, raw_content, source_name, source_file, source_record_id, ingested_at, batch_id
+- explain the role of each field
+- keep the definition easy to map into a relational database later
 
-Also write the TypeScript interface `RawRecord` matching this table.
+Also write the TypeScript interface `RawRecord` matching this shape.
+
+Do not generate SQL.
 ```
 
 ---
 
-## Prompt B — Generate standardized layer table DDL
+## Prompt B — Generate a standardized layer storage definition
 
 ```
 I have a data source called <source-name> with the following confirmed schema:
 
 <paste schema>
 
-Generate a SQL CREATE TABLE statement for the standardized layer. Requirements:
-- Table name: std_<source_name>
-- Column: id (UUID primary key)
-- Column: raw_id (UUID FK to raw_<source_name>.id)
-- Column: source_name (VARCHAR(100) NOT NULL)
-- Column: standardized_at (TIMESTAMPTZ NOT NULL)
-- One column per field in the schema, using proper SQL types:
-  - string → VARCHAR or TEXT
-  - integer → INTEGER or BIGINT
-  - decimal → NUMERIC(precision, scale)
-  - boolean → BOOLEAN
-  - date → DATE or TIMESTAMPTZ
-  - enum → VARCHAR(50) with a CHECK constraint listing allowed values
-  - json → JSONB
-- Mark nullable fields as NULL, required fields as NOT NULL
+Generate a storage definition for the standardized layer. Requirements:
+- logical table name: std_<source_name>
+- include linkage back to the raw layer
+- include one field per schema field with relational-friendly target types
+- mark nullable vs required fields
+- note any fields that should stay flexible because the sample is too small
 
 Also write the corresponding TypeScript interface `Std<SourceName>Record`.
+
+Do not generate SQL.
 ```
 
 ---

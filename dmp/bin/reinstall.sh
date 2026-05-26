@@ -24,27 +24,26 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
-MODE_FILE="$REPO_DIR/.dmp/source-mode.txt"
-SOURCE_FILE="$REPO_DIR/.dmp/source-repo.txt"
-REF_FILE="$REPO_DIR/.dmp/source-ref.txt"
+INSTALL_FILE="$REPO_DIR/dmp/install.json"
 
-if [[ ! -f "$SOURCE_FILE" ]]; then
-  printf 'Missing %s. Reinstall from the source framework repo first.\n' "$SOURCE_FILE"
+if [[ ! -f "$INSTALL_FILE" ]]; then
+  printf 'Missing %s. Install the framework first.\n' "$INSTALL_FILE"
   exit 1
 fi
 
-SOURCE_MODE="local"
-SOURCE_REF="local"
+read_json_field() {
+  local key="$1"
+  sed -n "s/.*\"$key\": \"\\([^\"]*\\)\".*/\\1/p" "$INSTALL_FILE" | head -n 1
+}
 
-if [[ -f "$MODE_FILE" ]]; then
-  SOURCE_MODE="$(cat "$MODE_FILE")"
-fi
+read_json_agents() {
+  sed -n 's/.*"selectedAgents": \[\(.*\)\].*/\1/p' "$INSTALL_FILE" | tr -d '"' | tr -d ' '
+}
 
-if [[ -f "$REF_FILE" ]]; then
-  SOURCE_REF="$(cat "$REF_FILE")"
-fi
-
-SOURCE_REPO="$(cat "$SOURCE_FILE")"
+SOURCE_MODE="$(read_json_field sourceMode)"
+SOURCE_REPO="$(read_json_field sourceRepo)"
+SOURCE_REF="$(read_json_field sourceRef)"
+SELECTED_AGENTS="$(read_json_agents)"
 
 if [[ "$SOURCE_MODE" == "github" ]]; then
   TMP_DIR="$(mktemp -d /private/tmp/dmp-github-reinstall.XXXXXX)"
@@ -52,10 +51,10 @@ if [[ "$SOURCE_MODE" == "github" ]]; then
   git clone --depth 1 --branch "$SOURCE_REF" "https://github.com/$SOURCE_REPO.git" "$TMP_DIR/source"
   INSTALLER="$TMP_DIR/source/scripts/install.sh"
   if [[ "$FORCE" -eq 1 ]]; then
-    exec env DMP_SOURCE_MODE=github DMP_SOURCE_REPO="$SOURCE_REPO" DMP_SOURCE_REF="$SOURCE_REF" \
+    exec env DMP_SOURCE_MODE=github DMP_SOURCE_REPO="$SOURCE_REPO" DMP_SOURCE_REF="$SOURCE_REF" DMP_SELECTED_AGENTS="$SELECTED_AGENTS" \
       "$INSTALLER" --force "$REPO_DIR"
   fi
-  exec env DMP_SOURCE_MODE=github DMP_SOURCE_REPO="$SOURCE_REPO" DMP_SOURCE_REF="$SOURCE_REF" \
+  exec env DMP_SOURCE_MODE=github DMP_SOURCE_REPO="$SOURCE_REPO" DMP_SOURCE_REF="$SOURCE_REF" DMP_SELECTED_AGENTS="$SELECTED_AGENTS" \
     "$INSTALLER" "$REPO_DIR"
 fi
 
@@ -67,7 +66,7 @@ if [[ ! -x "$INSTALLER" ]]; then
 fi
 
 if [[ "$FORCE" -eq 1 ]]; then
-  exec "$INSTALLER" --force "$REPO_DIR"
+  exec env DMP_SELECTED_AGENTS="$SELECTED_AGENTS" "$INSTALLER" --force "$REPO_DIR"
 fi
 
-exec "$INSTALLER" "$REPO_DIR"
+exec env DMP_SELECTED_AGENTS="$SELECTED_AGENTS" "$INSTALLER" "$REPO_DIR"

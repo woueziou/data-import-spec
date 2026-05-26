@@ -58,5 +58,7 @@ build them speculatively.
 ## Output of this step
 
 - A diagram or description of your three layers
-- The DDL (SQL) or schema definition for the raw and standardized tables
+- A storage definition for the raw and standardized layers
 - A list of serving layer candidates for later
+
+Only generate SQL if the user explicitly asks for SQL.

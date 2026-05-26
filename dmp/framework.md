@@ -27,7 +27,9 @@ Use one of:
 
 Every target repo keeps workflow state in `_dmp_output/`.
 
-Start a workflow with:
+`/dmp-intake` should create the workflow state on first use.
+
+If manual creation is needed, start a workflow with:
 
 ```bash
 ./dmp/bin/start-workflow.sh order_file "Order file parser"
@@ -42,7 +44,7 @@ This creates `_dmp_output/order_file/` with:
 - `workflow.json`
 - `artifacts/`
 
-The first intake pass should update that folder before deeper analysis.
+The first intake pass should create or update that folder before deeper analysis.
 
 ## Initialization Inputs
 
@@ -95,7 +97,6 @@ When drift, ambiguity, or a new source appears, go back to the earliest relevant
 
 - Copilot: `.github/agents/dmp-*.agent.md`
 - Gemini CLI: `.gemini/commands/dmp-*.toml`
-- Antigravity source: `_agents/plugins/dmp/skills/dmp-*/SKILL.md`
 - Antigravity install target: `.agents/plugins/dmp/skills/dmp-*/SKILL.md`
 - Kilo: `.kilo/skills/dmp-*/SKILL.md`
 - cmd: `.claude/commands/dmp-*.md`
