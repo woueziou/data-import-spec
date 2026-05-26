@@ -6,7 +6,7 @@
 
 | Agent | Command | Job |
 |---|---|---|
-| Pathfinder | `/dmp-intake` | Ask for the target path/location and capture source basics |
+| Pathfinder | `/dmp-intake` | Ask for the target path/location, capture source basics, and record schema preferences |
 | Cataloger | `/dmp-discover` | Inventory and profile raw data |
 | Mapper | `/dmp-model` | Build provisional schema, entities, layers, and naming rules |
 | Sentinel | `/dmp-guard` | Track uncertainty, drift, validation, and quality |
@@ -43,6 +43,21 @@ This creates `_dmp_output/order_file/` with:
 - `artifacts/`
 
 The first intake pass should update that folder before deeper analysis.
+
+## Initialization Inputs
+
+During `/dmp-intake`, the agent may ask short clarifying questions that affect
+downstream schema structure before discovery begins.
+
+Capture preferences such as:
+- naming convention for tables, fields, and files
+- singular vs plural entity names
+- preferred timestamp/date formats
+- ID/key naming style
+- schema grouping or layer expectations
+
+Record those decisions in `_dmp_output/<workflow-id>/context.md` and
+`decisions.md` so `/dmp-model` can use them as constraints.
 
 ## Loop
 

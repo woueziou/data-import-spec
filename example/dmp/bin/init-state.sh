@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
-STATE_DIR="${DMP_OUT_DIR:-$REPO_DIR/_dmp_out}"
+STATE_DIR="${DMP_OUT_DIR:-$REPO_DIR/_dmp_output}"
 
 mkdir -p "$STATE_DIR"
 
@@ -30,7 +30,7 @@ Run:
 ./dmp/bin/start-workflow.sh order_file "Order file parser"
 ```
 
-That creates `_dmp_out/order_file/` with:
+That creates `_dmp_output/order_file/` with:
 - `context.md`
 - `searches.md`
 - `tasks.md`

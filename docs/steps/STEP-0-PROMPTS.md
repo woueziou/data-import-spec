@@ -11,6 +11,12 @@ If I only give a vague description, keep asking until you have:
 - source name
 - access mode
 - sample path
+
+Then ask for any schema-shaping preferences that should be honored later, such as:
+- naming convention for tables/columns
+- singular vs plural entity naming
+- timestamp/date format expectations
+- ID/key naming style
 ```
 
 ---
@@ -28,6 +34,7 @@ Create a short intake note with:
 - access mode
 - owner
 - sample path
+- schema preferences
 - risks
 - next agent to run
 ```
@@ -44,6 +51,7 @@ Summarize this target source for the next DMP agent.
 Return:
 - target location
 - source type
+- schema preferences
 - known constraints
 - missing info
 - next step

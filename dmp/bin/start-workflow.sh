@@ -114,6 +114,15 @@ cat > "$WORKFLOW_DIR/context.md" <<EOF
 - Sensitivity: unknown
 - Current step: intake
 
+## Schema preferences
+
+- Table naming convention: unknown
+- Column naming convention: unknown
+- Entity naming style: unknown
+- Timestamp/date format: unknown
+- ID/key naming style: unknown
+- Layer/grouping preferences: unknown
+
 ## Goal
 
 Build or refine the parser for this source.
@@ -128,6 +137,7 @@ Build or refine the parser for this source.
 - What is the exact target path or location?
 - What format is the source?
 - Is there a stable sample file?
+- Are there naming or schema conventions that must be preserved?
 EOF
 
 cat > "$WORKFLOW_DIR/searches.md" <<EOF
@@ -151,6 +161,7 @@ cat > "$WORKFLOW_DIR/tasks.md" <<EOF
 
 - [ ] Confirm the exact target path or location
 - [ ] Save a representative sample path in \`context.md\`
+- [ ] Capture schema and naming preferences during intake
 - [ ] Run \`/dmp-discover\` and record findings in \`searches.md\`
 - [ ] Define the provisional schema
 - [ ] Write the next handoff in \`next-step.md\`
@@ -162,6 +173,7 @@ cat > "$WORKFLOW_DIR/decisions.md" <<EOF
 ## Decision log
 
 - Record parser, schema, naming, and quality decisions here.
+- Record any intake-time preferences that constrain schema design.
 
 ## Rejected options
 
@@ -176,9 +188,10 @@ Run \`/dmp-intake\`.
 ## What to do now
 
 1. Confirm the exact target file or location.
-2. Update \`context.md\` with the source details.
-3. Add any raw inspection evidence to \`searches.md\`.
-4. Move the workflow forward to \`/dmp-discover\`.
+2. Capture any schema or naming preferences in \`context.md\` and \`decisions.md\`.
+3. Update \`context.md\` with the source details.
+4. Add any raw inspection evidence to \`searches.md\`.
+5. Move the workflow forward to \`/dmp-discover\`.
 
 ## Handoff note
 

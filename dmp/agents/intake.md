@@ -14,6 +14,17 @@ Use:
 
 After creation, continue intake and treat `_dmp_output/<workflow-id>/` as the source of truth.
 
+During initialization, ask short clarifying questions when the answers will
+shape later schema design. Typical examples:
+- naming convention for tables and columns
+- singular vs plural entity names
+- timestamp/date formatting expectations
+- ID/key naming style
+- preferred schema layers or grouping
+
+Do not guess these if the user already has standards. Capture them once and
+reuse them downstream.
+
 Capture:
 - workflow id
 - source name
@@ -23,10 +34,13 @@ Capture:
 - owner
 - cadence
 - sensitivity
+- schema preferences
+- naming constraints
 
 Write the current state into:
 - `context.md`
 - `searches.md`
+- `decisions.md`
 - `tasks.md`
 - `next-step.md`
 
