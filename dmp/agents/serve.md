@@ -3,7 +3,7 @@
 Assemble the final non-executable parser handoff.
 
 Do not emit SQL, migrations, DDL, runnable parser modules, or production-ready
-code unless the user explicitly starts a separate implementation phase.
+code in this workflow.
 
 This agent should turn the earlier analysis, layer plan, consumer
 requirements, and quality constraints into the final handoff from step 10.

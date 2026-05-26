@@ -185,17 +185,14 @@ _dmp_output/<workflow-id>/artifacts/
 
 Start with:
 
-1. `parser-spec.md`
-2. `output-contract.md`
-3. `logging-contract.md`
-4. `file-analysis-report.md`
-5. `data-schema.md`
-6. `parsing-strategy-guide.md`
-7. `best-practices-and-guardrails.md`
-8. `examples.md`
-9. `dos-and-donts.md`
-10. `edge-cases-and-risk-matrix.md`
-11. `implementation-roadmap.md`
+1. `file-analysis-report.md`
+2. `data-schema.md`
+3. `parsing-strategy-guide.md`
+4. `best-practices-and-guardrails.md`
+5. `examples.md`
+6. `dos-and-donts.md`
+7. `edge-cases-and-risk-matrix.md`
+8. `implementation-roadmap.md`
 
 The final handoff is an implementation roadmap and artifact pack, not a parser
 implementation.

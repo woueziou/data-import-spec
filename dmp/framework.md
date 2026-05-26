@@ -104,8 +104,9 @@ Additional workflow artifacts expected from the documented steps:
 - validation rules definition
 - ambiguity log
 
-Do not emit SQL, migrations, or runnable parser modules in workflow artifacts
-unless the user explicitly asks for a separate implementation phase.
+Do not emit SQL, migrations, or runnable parser modules in workflow artifacts.
+If the user later wants implementation, treat that as work outside the DMP
+workflow.
 
 ## Loop
 

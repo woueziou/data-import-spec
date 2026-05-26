@@ -205,7 +205,7 @@ cat > "$WORKFLOW_DIR/decisions.md" <<EOF
 - Record parser, schema, naming, and quality decisions here.
 - Record any intake-time preferences that constrain schema design.
 - Record example-language decisions and whether Python defaulting was used.
-- Record any explicit request to enter a separate implementation phase.
+- Record any request for follow-on implementation outside the DMP workflow.
 
 ## Rejected options
 
@@ -239,8 +239,7 @@ Store generated analysis reports, schemas, parsing guides, guardrails,
 examples, and roadmap documents for this workflow here.
 
 Do not store runnable parser modules, complete scripts, SQL, DDL, or
-migration files here unless the user explicitly requested a separate
-implementation phase.
+migration files here. They belong outside the DMP workflow.
 
 ## Suggested read order
 

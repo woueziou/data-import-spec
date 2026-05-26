@@ -91,8 +91,9 @@ Required handoff artifacts:
 - `artifacts/edge-cases-and-risk-matrix.md`
 - `artifacts/implementation-roadmap.md`
 
-Do not emit SQL, migrations, or runnable parser modules in workflow artifacts
-unless the user explicitly asks for a separate implementation phase.
+Do not emit SQL, migrations, or runnable parser modules in workflow artifacts.
+If the user later wants implementation, treat that as work outside the DMP
+workflow.
 
 ## Loop
 
