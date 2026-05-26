@@ -1,59 +1,54 @@
 # Step 5 — AI Prompts
 
-## Prompt A — Generate a raw layer storage definition
+## Prompt A — Generate an observation-layer definition
 
 ```
 I have a data source called <source-name> with the following provisional schema:
 
 <paste schema>
 
-Generate a storage definition for the raw layer. Requirements:
-- logical table name: raw_<source_name>
-- fields: id, raw_content, source_name, source_file, source_record_id, ingested_at, batch_id
+Generate an observation-layer definition. Requirements:
+- preserve the raw record as received
+- record filename and delivery clues
+- record record-boundary assumptions
+- note what is directly observed vs inferred
 - explain the role of each field
-- keep the definition easy to map into a relational database later
+- keep the output implementation-agnostic
 
-Also write the TypeScript interface `RawRecord` matching this shape.
-
-Do not generate SQL.
+Do not generate executable code.
 ```
 
 ---
 
-## Prompt B — Generate a standardized layer storage definition
+## Prompt B — Generate a normalization-layer definition
 
 ```
 I have a data source called <source-name> with the following confirmed schema:
 
 <paste schema>
 
-Generate a storage definition for the standardized layer. Requirements:
-- logical table name: std_<source_name>
-- include linkage back to the raw layer
-- include one field per schema field with relational-friendly target types
+Generate a normalization-layer definition. Requirements:
+- include linkage back to the observation layer
+- include one field per schema field with canonical target types
 - mark nullable vs required fields
 - note any fields that should stay flexible because the sample is too small
 
-Also write the corresponding TypeScript interface `Std<SourceName>Record`.
-
-Do not generate SQL.
+If a code example would help, include one short NON-PRODUCTION EXAMPLE in
+<user-language-or-Python-default> and label it as illustrative only.
 ```
 
 ---
 
-## Prompt C — Write a TypeScript ingestion pipeline
+## Prompt C — Describe a parsing pipeline architecture
 
 ```
-I need a TypeScript ingestion pipeline for a source called <source-name>.
+I need a parser architecture outline for a source called <source-name>.
 
-The pipeline must:
-1. Accept an array of raw parsed records (type: <SourceName>Raw[])
-2. For each record:
-   a. Insert the original raw line into the raw layer (type: RawRecord)
-   b. Transform the raw record into a standardized record
-   c. Insert into the standardized layer
-3. Run both inserts in a transaction so they succeed or fail together
-4. Return a summary: { total, inserted, failed, errors }
+The architecture must:
+1. Separate observation, normalization, validation, and reporting stages
+2. Explain what each stage consumes and produces
+3. Show where anomalies, low-confidence fields, and rejected records are handled
+4. Return a high-level run summary conceptually
 
 Transformation rules:
 <list your specific transformations here, e.g.:
@@ -62,6 +57,9 @@ Transformation rules:
 - status: map "A" → "active", "I" → "inactive", "S" → "suspended"
 >
 
-Use a database client interface I'll provide (db.query(sql, params)).
-Include error handling per record so one bad record doesn't abort the batch.
+Include one short NON-PRODUCTION EXAMPLE in
+<user-language-or-Python-default> showing the stage flow.
+
+The example must be illustrative only, incomplete on purpose, and clearly
+labeled as non-executable guidance.
 ```

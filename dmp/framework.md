@@ -6,11 +6,11 @@
 
 | Agent | Command | Job |
 |---|---|---|
-| Pathfinder | `/dmp-intake` | Ask for the target path/location, target database, source basics, and schema preferences |
-| Cataloger | `/dmp-discover` | Inventory and profile raw data, including file names, data nature, sample row counts, and record structure |
-| Mapper | `/dmp-model` | Build a provisional schema and parser contract from the submitted samples |
-| Sentinel | `/dmp-guard` | Track uncertainty, drift, validation, and quality |
-| Builder | `/dmp-serve` | Design the relational storage plan and parser-to-database handoff |
+| Pathfinder | `/dmp-intake` | Ask for the target path/location, source basics, constraints, and example-language preference |
+| Cataloger | `/dmp-discover` | Cover steps 1-2: source inventory, profiling, file-name analysis, data nature, and profile reports |
+| Mapper | `/dmp-model` | Cover steps 3-7: schema, entities, parsing strategy, canonical rules, data dictionary, and artifact specs |
+| Sentinel | `/dmp-guard` | Cover steps 8-9 and 11: drift, consumer validation, quality rules, risk notes, and validation specs |
+| Builder | `/dmp-serve` | Cover step 10: final handoff assembly and implementation roadmap |
 
 ## Start Rule
 
@@ -21,7 +21,7 @@ Use one of:
 - folder path
 - bucket path
 - endpoint URL
-- database source
+- other source location
 
 ## State
 
@@ -52,12 +52,12 @@ During `/dmp-intake`, the agent may ask short clarifying questions that affect
 downstream schema structure before discovery begins.
 
 Capture preferences such as:
-- naming convention for tables, fields, and files
+- naming convention for fields and artifacts
 - singular vs plural entity names
 - preferred timestamp/date formats
 - ID/key naming style
 - schema grouping or layer expectations
-- target relational database
+- preferred language for illustrative examples
 
 Record those decisions in `_dmp_output/<workflow-id>/context.md` and
 `decisions.md` so `/dmp-model` can use them as constraints.
@@ -66,28 +66,46 @@ Record those decisions in `_dmp_output/<workflow-id>/context.md` and
 
 The workflow solves this problem:
 
-Given undocumented text sample data, determine how to parse it and store it in
-a relational database.
+Given undocumented text sample data, determine how a robust parser should be
+designed without generating executable parser code.
 
-The required handoff is not just a schema. It must include enough parser-level
-detail to implement ingestion from the submitted samples with minimal guessing,
-while making downstream relational storage easier.
+The required handoff is not just a schema. It must include enough file-level,
+record-level, and validation detail that a developer or another LLM can build
+the parser from the submitted samples with minimal guessing.
 
 Discovery should also identify the likely nature of the data and record the
 confidence of that classification. If confidence is low or ambiguity remains,
 the agent may ask the user for more context before proceeding.
 
-Required parser handoff artifacts:
-- `artifacts/parser-spec.md`
-- `artifacts/output-contract.md`
-- `artifacts/logging-contract.md`
+Core workflow rules:
+- never generate working, complete, or directly executable parser code
+- keep code-related content illustrative only
+- use the user-requested language for examples; default to Python if none was given
+- treat file names, sample limits, and anomalies as first-class evidence
 
-When the workflow reaches the final implementation handoff, ask the user:
-- which language to use for the parser
-- where to create the parser script
+Required handoff artifacts:
+- `artifacts/file-analysis-report.md`
+- `artifacts/data-schema.md`
+- `artifacts/parsing-strategy-guide.md`
+- `artifacts/best-practices-and-guardrails.md`
+- `artifacts/examples.md`
+- `artifacts/dos-and-donts.md`
+- `artifacts/edge-cases-and-risk-matrix.md`
+- `artifacts/implementation-roadmap.md`
 
-Do not emit SQL or migration code in workflow artifacts unless the user
-explicitly asks for SQL.
+Additional workflow artifacts expected from the documented steps:
+- source catalog
+- profile report per source
+- entity list and join map
+- `canonical-rules.md`
+- `data-dictionary.md` or `data-dictionary.json`
+- drift detection plan
+- consumer requirements table
+- validation rules definition
+- ambiguity log
+
+Do not emit SQL, migrations, or runnable parser modules in workflow artifacts
+unless the user explicitly asks for a separate implementation phase.
 
 ## Loop
 

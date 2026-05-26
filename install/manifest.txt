@@ -1,4 +1,4 @@
-AGENTS.md|AGENTS.md
+dmp/AGENTS.md|dmp/AGENTS.md
 GEMINI.md|GEMINI.md
 docs|docs
 dmp|dmp

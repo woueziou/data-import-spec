@@ -30,7 +30,7 @@ fileNameHints, likelyDataNature, confidence, format, hasHeader, delimiter, colum
 
 ---
 
-## Prompt B — Generate a TypeScript source catalog entry
+## Prompt B — Generate a source catalog entry
 
 ```
 Based on the following file information:
@@ -44,10 +44,22 @@ Based on the following file information:
 - Approximate size: <size>
 - Owner: <who produces it>
 
-Write a TypeScript interface called `SourceCatalogEntry` and a populated
-constant for this source. Include: id, name, format, deliveryMode,
-frequency, volumeEstimate, owner, trustLevel, samplePath, fileNameHints,
-likelyDataNature, confidence, notes.
+Write a JSON object or Markdown entry for this source catalog. Include:
+- id
+- name
+- format
+- deliveryMode
+- frequency
+- volumeEstimate
+- owner
+- trustLevel
+- samplePath
+- fileNameHints
+- likelyDataNature
+- confidence
+- notes
+
+Do not generate executable code.
 ```
 
 ---

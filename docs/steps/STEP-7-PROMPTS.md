@@ -35,11 +35,10 @@ The following fields in my schema are classified as "ambiguous":
 For each ambiguous field:
 1. List the competing hypotheses for what it means
 2. Describe what additional data or context would resolve the ambiguity
-3. Write a TypeScript type that safely stores the raw value without committing
-   to an interpretation, with a boolean flag `isVerified`
-
-Also generate a function `deferAmbiguousField(raw: string, fieldName: string)`
-that wraps the value in this deferred structure.
+3. Describe a deferred-value structure that safely stores the raw value without
+   committing to an interpretation, with a boolean flag `isVerified`
+4. If helpful, add one short NON-PRODUCTION EXAMPLE in
+   <user-language-or-Python-default> showing how the deferred structure would be used
 ```
 
 ---

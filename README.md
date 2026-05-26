@@ -1,56 +1,151 @@
 # DMP Data Import Framework
 
-This repo packages a reusable `dmp` workflow for undocumented data sources.
+DMP is a workflow framework for turning undocumented text data into a
+comprehensive, non-executable parser analysis pack.
 
-Current version: `0.1.7`
+It is designed for cases like:
+- vendor files with no schema documentation
+- flat files, logs, exports, and drops from unknown systems
+- samples where the file name and the content both contain clues
+- teams that need a structured handoff before any parser code is written
+
+The workflow does not stop at "guess a schema". Its goal is to answer:
+
+1. What is the nature of this data?
+2. How confident are we in that conclusion?
+3. What structures, patterns, and anomalies are present?
+4. How should a parser be designed to handle them safely?
+5. What artifacts does a developer or another LLM need to build it?
+
+## Purpose
+
+DMP gives an AI-assisted workflow for:
+- deeply analyzing undocumented files
+- recording ambiguity and confidence explicitly
+- producing parser-ready design artifacts
+- documenting guardrails, validation, and edge cases
+- generating illustrative examples only, never executable parser code
+
+The final handoff should include:
+- `artifacts/file-analysis-report.md`
+- `artifacts/data-schema.md`
+- `artifacts/parsing-strategy-guide.md`
+- `artifacts/best-practices-and-guardrails.md`
+- `artifacts/examples.md`
+- `artifacts/dos-and-donts.md`
+- `artifacts/edge-cases-and-risk-matrix.md`
+- `artifacts/implementation-roadmap.md`
+
+When examples are needed, use the user-requested language. If none is given,
+default to Python and state that default explicitly.
+
+## How It Works
+
+The workflow is split into five agents:
+
+| Agent | Command | Purpose |
+|---|---|---|
+| Pathfinder | `/dmp-intake` | Capture source location, sample path, naming preferences, and example-language preference |
+| Cataloger | `/dmp-discover` | Profile the sample, file name, likely data nature, and confidence |
+| Mapper | `/dmp-model` | Produce the schema/model, parsing strategy, and output artifact specs |
+| Sentinel | `/dmp-guard` | Record ambiguity, drift rules, validation, guardrails, and blockers |
+| Builder | `/dmp-serve` | Assemble the final analysis handoff and implementation roadmap |
+
+Workflow state lives in `_dmp_output/<workflow-id>/`.
 
 ## Install
 
-Install with `npx`:
+### End users
+
+Install into a target repository with `npx`:
 
 ```bash
 npx @petadata/parser@latest
 ```
 
-Run it from inside the target repo, or pass a target path as the last argument.
-The installer asks which agents you want and only installs those selections.
+You can also pass a target repository path:
 
-If the target repo already has `AGENTS.md` or `GEMINI.md`, re-run with
-`--force` or merge those files manually first.
+```bash
+npx @petadata/parser@latest /path/to/target-repo
+```
 
-## What it installs
+The installer will ask for:
+- which agents to install
+- which provider surfaces to install
 
+Supported provider IDs:
+- `copilot`
+- `gemini`
+- `claude`
+- `kilo`
+- `antigravity`
+
+You can also select them non-interactively:
+
+```bash
+npx @petadata/parser@latest \
+  --agents intake,discover,model,guard,serve \
+  --providers gemini,claude \
+  /path/to/target-repo
+```
+
+If the target repo already contains installed DMP files such as
+`dmp/AGENTS.md` or `GEMINI.md`, re-run with `--force` or merge manually.
+
+### What gets installed
+
+Always installed:
+- `dmp/AGENTS.md`
 - `dmp/framework.md`
-- selected `dmp/agents/` specs
-- `dmp/bin/init-state.sh` and `dmp/bin/start-workflow.sh`
-- `dmp/bin/reinstall.sh` for re-running install from the target repo
-- `dmp/version.json` and `dmp/install.json` for version tracking
-- `AGENTS.md` and `GEMINI.md`
-- selected tool surfaces for Copilot, Gemini CLI, Antigravity, Kilo, and `cmd`
+- selected `dmp/agents/*.md`
+- `dmp/bin/init-state.sh`
+- `dmp/bin/start-workflow.sh`
+- `dmp/bin/reinstall.sh`
+- `dmp/version.json`
+- `dmp/install.json`
 
-## What it does not install
-
-- `docs/`
-- `example/`
-- `.dmp/`
-- `_dmp_output/`
-
+Installed only when the corresponding provider is selected:
+- `GEMINI.md`
+- `.github/agents/`
+- `.gemini/commands/`
+- `.claude/commands/`
+- `.kilo/skills/`
+- `.agents/plugins/dmp/`
 `_dmp_output/` is created on first use of `/dmp-intake`.
 
-## Start A Workflow
+## How To Use
 
-Start with `/dmp-intake`.
+### 1. Start from intake
 
-On first use, it should create `_dmp_output/` and `_dmp_output/<workflow-id>/`
-before deeper analysis.
+Inside the target repository, start with:
 
-If you want to create the workflow folder manually, you can still run:
+```text
+/dmp-intake
+```
+
+If the source path is unknown, the agent should ask for it first.
+
+Intake should capture:
+- target file/folder/location
+- sample file path
+- naming and schema preferences
+- preferred language for illustrative examples, or default to Python
+
+### 2. Let the workflow create state
+
+On first use, DMP should create:
+
+```text
+_dmp_output/<workflow-id>/
+```
+
+If you need to create a workflow manually:
 
 ```bash
 ./dmp/bin/start-workflow.sh order_file "Order file parser"
 ```
 
-That creates `_dmp_output/order_file/` with:
+That folder contains:
 - `context.md`
 - `searches.md`
 - `tasks.md`
@@ -59,30 +154,120 @@ That creates `_dmp_output/order_file/` with:
 - `workflow.json`
 - `artifacts/`
 
-## Update From Target Repo
+### 3. Run the workflow through the agents
 
-After the first install, you can re-run the install directly from the target
-repo with:
+Typical sequence:
+
+```text
+/dmp-intake
+/dmp-discover
+/dmp-model
+/dmp-guard
+/dmp-serve
+```
+
+Key workflow rules:
+- never modify raw source files in place
+- use file names as evidence, not just file content
+- identify the likely nature of the data
+- record a confidence level for classification
+- ask the user for more context when confidence is low
+- keep outputs short, structured, and handoff-ready
+- never generate working or directly executable parser code
+
+### 4. Use the generated artifacts
+
+The important artifacts are under:
+
+```text
+_dmp_output/<workflow-id>/artifacts/
+```
+
+Start with:
+
+1. `parser-spec.md`
+2. `output-contract.md`
+3. `logging-contract.md`
+4. `file-analysis-report.md`
+5. `data-schema.md`
+6. `parsing-strategy-guide.md`
+7. `best-practices-and-guardrails.md`
+8. `examples.md`
+9. `dos-and-donts.md`
+10. `edge-cases-and-risk-matrix.md`
+11. `implementation-roadmap.md`
+
+The final handoff is an implementation roadmap and artifact pack, not a parser
+implementation.
+
+## Reinstall / Update
+
+After a repository has DMP installed, update it from that repo with:
 
 ```bash
 ./dmp/bin/reinstall.sh
 ```
 
-That path is intended for updates of an existing DMP install.
+Reinstall uses the selections stored in `dmp/install.json`, including:
+- selected agents
+- selected providers
+- installation source metadata
 
-## Entry points
+## Example
 
-- Start with `/dmp-intake`
-- `/dmp-intake` should create `_dmp_output/<workflow-id>/` if it does not exist yet
-- If the target path or location is missing, ask for it first
-- Ask for the target relational database during intake
-- During intake, ask for schema-shaping preferences such as naming conventions if they matter downstream
-- Require parser handoff artifacts: `parser-spec.md`, `output-contract.md`, `logging-contract.md`
-- At the final handoff, ask which language to use for the parser and where to create the script
-- Use `_dmp_output/<workflow-id>/` as the source of truth for handoff and resume
-- Use `dmp/framework.md` as the workflow map inside installed repos
-
-## Example Sandbox
+The repo includes an example sandbox:
 
 - [example/README.md](example/README.md)
-- The `example/` folder is a ready-to-use target repo for experimenting with the framework
+
+Use it to understand the workflow structure without touching a real project.
+
+## Repository Layout
+
+Important paths in this repo:
+
+- [dmp/AGENTS.md](dmp/AGENTS.md)
+- [dmp/framework.md](dmp/framework.md)
+- [dmp/agents](dmp/agents)
+- [dmp/bin](dmp/bin)
+- [bin/dmp.js](bin/dmp.js)
+- [scripts/install.sh](scripts/install.sh)
+- [docs](docs)
+- [example](example)
+
+## Contributing
+
+Contributions should improve one or more of:
+- workflow clarity
+- installer behavior
+- provider-surface generation
+- artifact quality
+- reproducibility of parser handoffs
+
+### Contributing workflow changes
+
+If you change workflow behavior:
+- update `dmp/framework.md`
+- update the affected `dmp/agents/*.md`
+- update the scaffold in `dmp/bin/start-workflow.sh` if new workflow state is required
+- update `docs/` if prompts or explanations change
+- update mirrored example or install-facing files when relevant
+
+### Contributing installer changes
+
+If you change installation behavior:
+- update `bin/dmp.js`
+- update `scripts/install.sh`
+- update `dmp/bin/reinstall.sh`
+- update `install/manifest.txt` if install layout changes
+- update this README
+
+### Development notes
+
+- Prefer editing workflow source files rather than hand-editing generated output.
+- Keep the workflow generic; it should work for undocumented files broadly, not for a single sample shape.
+- Avoid generating executable parser code in workflow artifacts.
+- Preserve the rule that provider surfaces are selectable.
+
+## License
+
+MIT

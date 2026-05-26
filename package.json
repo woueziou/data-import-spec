@@ -10,7 +10,6 @@
     "access": "public"
   },
   "files": [
-    "AGENTS.md",
     "CHANGELOG.md",
     "GEMINI.md",
     "README.md",

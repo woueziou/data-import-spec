@@ -31,6 +31,7 @@ SOURCE_MODE="${DMP_SOURCE_MODE:-local}"
 SOURCE_REPO="${DMP_SOURCE_REPO:-$REPO_DIR}"
 SOURCE_REF="${DMP_SOURCE_REF:-local}"
 SELECTED_AGENTS="${DMP_SELECTED_AGENTS:-intake,discover,model,guard,serve}"
+SELECTED_PROVIDERS="${DMP_SELECTED_PROVIDERS:-copilot,gemini,claude,kilo,antigravity}"
 IS_REINSTALL=0
 
 mkdir -p "$TARGET_DIR"
@@ -61,8 +62,7 @@ copy_file() {
 }
 
 copy_core() {
-  copy_file "AGENTS.md" "AGENTS.md"
-  copy_file "GEMINI.md" "GEMINI.md"
+  copy_file "dmp/AGENTS.md" "dmp/AGENTS.md"
   copy_file "dmp/framework.md" "dmp/framework.md"
   copy_file "dmp/version.json" "dmp/version.json"
   copy_file "dmp/bin/init-state.sh" "dmp/bin/init-state.sh"
@@ -70,21 +70,55 @@ copy_core() {
   copy_file "dmp/bin/reinstall.sh" "dmp/bin/reinstall.sh"
 }
 
+has_provider() {
+  local wanted="$1"
+  local OLD_IFS="$IFS"
+  IFS=','
+  for provider in $SELECTED_PROVIDERS; do
+    provider="$(printf '%s' "$provider" | tr -d '[:space:]')"
+    if [[ "$provider" == "$wanted" ]]; then
+      IFS="$OLD_IFS"
+      return 0
+    fi
+  done
+  IFS="$OLD_IFS"
+  return 1
+}
+
+copy_provider_core() {
+  if has_provider "gemini"; then
+    copy_file "GEMINI.md" "GEMINI.md"
+  fi
+}
+
 copy_agent() {
   local agent="$1"
   copy_file "dmp/agents/$agent.md" "dmp/agents/$agent.md"
-  copy_file ".github/agents/dmp-$agent.agent.md" ".github/agents/dmp-$agent.agent.md"
-  copy_file ".gemini/commands/dmp-$agent.toml" ".gemini/commands/dmp-$agent.toml"
-  copy_file ".claude/commands/dmp-$agent.md" ".claude/commands/dmp-$agent.md"
-  copy_file ".kilo/skills/dmp-$agent/SKILL.md" ".kilo/skills/dmp-$agent/SKILL.md"
-  copy_file "_agents/plugins/dmp/plugin.json" ".agents/plugins/dmp/plugin.json"
-  copy_file "_agents/plugins/dmp/skills/dmp-$agent/SKILL.md" ".agents/plugins/dmp/skills/dmp-$agent/SKILL.md"
+  if has_provider "copilot"; then
+    copy_file ".github/agents/dmp-$agent.agent.md" ".github/agents/dmp-$agent.agent.md"
+  fi
+  if has_provider "gemini"; then
+    copy_file ".gemini/commands/dmp-$agent.toml" ".gemini/commands/dmp-$agent.toml"
+  fi
+  if has_provider "claude"; then
+    copy_file ".claude/commands/dmp-$agent.md" ".claude/commands/dmp-$agent.md"
+  fi
+  if has_provider "kilo"; then
+    copy_file ".kilo/skills/dmp-$agent/SKILL.md" ".kilo/skills/dmp-$agent/SKILL.md"
+  fi
+  if has_provider "antigravity"; then
+    copy_file "_agents/plugins/dmp/plugin.json" ".agents/plugins/dmp/plugin.json"
+    copy_file "_agents/plugins/dmp/skills/dmp-$agent/SKILL.md" ".agents/plugins/dmp/skills/dmp-$agent/SKILL.md"
+  fi
 }
 
-guard_root_file "AGENTS.md"
-guard_root_file "GEMINI.md"
+guard_root_file "dmp/AGENTS.md"
+if has_provider "gemini"; then
+  guard_root_file "GEMINI.md"
+fi
 
 copy_core
+copy_provider_core
 
 OLD_IFS="$IFS"
 IFS=','
@@ -105,7 +139,8 @@ cat > "$TARGET_DIR/dmp/install.json" <<EOF
   "sourceMode": "$SOURCE_MODE",
   "sourceRepo": "$SOURCE_REPO",
   "sourceRef": "$SOURCE_REF",
-  "selectedAgents": [$(printf '"%s"' "${SELECTED_AGENTS//,/\",\"}")]
+  "selectedAgents": [$(printf '"%s"' "${SELECTED_AGENTS//,/\",\"}")],
+  "selectedProviders": [$(printf '"%s"' "${SELECTED_PROVIDERS//,/\",\"}")]
 }
 EOF
 

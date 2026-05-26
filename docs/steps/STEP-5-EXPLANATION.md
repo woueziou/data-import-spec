@@ -1,34 +1,33 @@
-# Step 5 — Separate Storage into Layers
+# Step 5 — Separate Parsing Work into Layers
 
 ## What this step is
 
-You don't go straight from raw files to a final database schema. Instead,
-you design distinct storage layers, each with a clear responsibility.
+You should not jump straight from raw files to a finished parser design.
+Instead, separate the work into clear analysis and transformation layers.
 
 ## Why it matters
 
-If you transform data immediately on ingestion and the transformation is
-wrong, you lose the original. If you only store raw blobs, you can't query
-efficiently. Layers give you the best of both.
+If you mix discovery, normalization, and downstream assumptions in one step,
+you make mistakes harder to detect. Layers keep evidence, interpretation,
+and implementation guidance separate.
 
 ## The three layers
 
-### Raw Layer
+### Observation Layer
 
-**Purpose**: Preserve the original data exactly as received.
+**Purpose**: Preserve what was actually observed in the sample.
 
 Store:
 - The full original record (as a string or blob)
 - Source name
-- Ingestion timestamp
-- Source record ID if one exists
-- File name and batch ID
+- File name and batch clues
+- Record boundaries and offsets where relevant
 
-**Never transform here.** This is your audit trail and your fallback.
+**Do not interpret here.** This is your evidence base.
 
-### Standardized Layer
+### Normalization Layer
 
-**Purpose**: Clean, typed, normalized records you can query reliably.
+**Purpose**: Describe how raw values become canonical values.
 
 Transform:
 - Trim whitespace from all string fields
@@ -36,29 +35,25 @@ Transform:
 - Convert strings to numbers where appropriate
 - Normalize enums to canonical values (e.g. "Y" / "YES" / "1" → `true`)
 - Standardize units (e.g. all amounts in the same currency)
-- Assign a canonical entity ID
+- Assign canonical identifiers where justified
 
-**This layer is where your provisional schema lives in practice.**
+**This layer is where your provisional schema becomes operational guidance.**
 
-### Serving Layer
+### Handoff Layer
 
-**Purpose**: Optimized, purpose-specific models built on top of the
-standardized layer.
+**Purpose**: Package the information an implementation team will need.
 
 Examples:
-- Analytics tables (wide, denormalized, fast to aggregate)
-- Operational lookup tables (indexed by ID, fast single-record reads)
-- Search documents (flat, text-optimized)
-- Feature tables for ML (numeric, no nulls, normalized)
-- Audit/history tables (append-only, timestamped)
+- Formal schemas
+- Parsing strategy guides
+- Guardrails and validation rules
+- Illustrative examples
+- Implementation roadmap documents
 
-**Build serving layer tables only when you know the use case.** Don't
-build them speculatively.
+**Only include what the implementation team can defend from evidence.**
 
 ## Output of this step
 
 - A diagram or description of your three layers
-- A storage definition for the raw and standardized layers
-- A list of serving layer candidates for later
-
-Only generate SQL if the user explicitly asks for SQL.
+- A definition of what belongs in each layer
+- A note about what must stay ambiguous until more evidence arrives
