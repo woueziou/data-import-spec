@@ -8,6 +8,7 @@ up-front preferences that will affect schema structure later.
 ## What to capture
 
 - Target path or location
+- Target relational database
 - Source name
 - Access mode
 - Sample path
@@ -24,3 +25,6 @@ If the user does not give a path, ask one direct question and wait.
 If naming, entity, or schema conventions are likely to matter later, ask for
 them during intake and save them as workflow decisions instead of rediscovering
 them during modeling.
+
+If the target database is unknown, ask for it during intake. Storage guidance
+should adapt to the user's chosen relational database instead of assuming one.

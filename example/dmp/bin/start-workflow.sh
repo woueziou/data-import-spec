@@ -107,6 +107,7 @@ cat > "$WORKFLOW_DIR/context.md" <<EOF
 - Workflow id: \`$WORKFLOW_ID\`
 - Title: $TITLE
 - Target path: ${TARGET_PATH:-<fill during /dmp-intake>}
+- Target database: unknown
 - Source type: unknown
 - Owner: unknown
 - Sample path: unknown
@@ -114,20 +115,33 @@ cat > "$WORKFLOW_DIR/context.md" <<EOF
 - Sensitivity: unknown
 - Current step: intake
 
+## Schema preferences
+
+- Table naming convention: unknown
+- Column naming convention: unknown
+- Entity naming style: unknown
+- Timestamp/date format: unknown
+- ID/key naming style: unknown
+- Layer/grouping preferences: unknown
+
 ## Goal
 
-Build or refine the parser for this source.
+Given undocumented sample data, determine how to parse it and store it in a
+relational database.
 
 ## Current understanding
 
 - Add raw source details here.
 - Capture assumptions that another model should not have to rediscover.
+- Keep parser decisions tied to the submitted sample size and row counts.
 
 ## Open questions
 
 - What is the exact target path or location?
+- What relational database is the target?
 - What format is the source?
 - Is there a stable sample file?
+- Are there naming or schema conventions that must be preserved?
 EOF
 
 cat > "$WORKFLOW_DIR/searches.md" <<EOF
@@ -140,6 +154,7 @@ cat > "$WORKFLOW_DIR/searches.md" <<EOF
 ## Findings
 
 - Capture format clues, field counts, delimiters, anomalies, and links.
+- Record sample row counts and what those counts do or do not prove.
 
 ## Evidence
 
@@ -150,9 +165,15 @@ cat > "$WORKFLOW_DIR/tasks.md" <<EOF
 # Tasks
 
 - [ ] Confirm the exact target path or location
+- [ ] Confirm the target relational database
 - [ ] Save a representative sample path in \`context.md\`
+- [ ] Capture schema and naming preferences during intake
 - [ ] Run \`/dmp-discover\` and record findings in \`searches.md\`
 - [ ] Define the provisional schema
+- [ ] Write a parser specification in \`artifacts/parser-spec.md\`
+- [ ] Write an output contract in \`artifacts/output-contract.md\`
+- [ ] Write a logging contract in \`artifacts/logging-contract.md\`
+- [ ] Write a storage plan without SQL unless the user asks for SQL
 - [ ] Write the next handoff in \`next-step.md\`
 EOF
 
@@ -162,6 +183,8 @@ cat > "$WORKFLOW_DIR/decisions.md" <<EOF
 ## Decision log
 
 - Record parser, schema, naming, and quality decisions here.
+- Record any intake-time preferences that constrain schema design.
+- Record database-target decisions and whether SQL was explicitly requested.
 
 ## Rejected options
 
@@ -176,9 +199,11 @@ Run \`/dmp-intake\`.
 ## What to do now
 
 1. Confirm the exact target file or location.
-2. Update \`context.md\` with the source details.
-3. Add any raw inspection evidence to \`searches.md\`.
-4. Move the workflow forward to \`/dmp-discover\`.
+2. Confirm the target relational database.
+3. Capture any schema or naming preferences in \`context.md\` and \`decisions.md\`.
+4. Update \`context.md\` with the source details.
+5. Add any raw inspection evidence to \`searches.md\`.
+6. Move the workflow forward to \`/dmp-discover\`.
 
 ## Handoff note
 
@@ -189,8 +214,11 @@ EOF
 cat > "$WORKFLOW_DIR/artifacts/README.md" <<'EOF'
 # Artifacts
 
-Store generated schemas, parser notes, sample extracts, and validation outputs
-for this workflow here.
+Store generated schemas, parser specs, output contracts, logging contracts,
+storage plans, sample extracts, and validation outputs for this workflow here.
+
+Do not store SQL, DDL, or migration files here unless the user explicitly
+asked for SQL output.
 EOF
 
 printf 'Started workflow %s at %s\n' "$WORKFLOW_ID" "$WORKFLOW_DIR"

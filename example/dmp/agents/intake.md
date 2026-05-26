@@ -21,6 +21,7 @@ shape later schema design. Typical examples:
 - timestamp/date formatting expectations
 - ID/key naming style
 - preferred schema layers or grouping
+- target relational database
 
 Do not guess these if the user already has standards. Capture them once and
 reuse them downstream.
@@ -34,6 +35,7 @@ Capture:
 - owner
 - cadence
 - sensitivity
+- target database
 - schema preferences
 - naming constraints
 

@@ -34,10 +34,10 @@ Output as a JSON array:
 
 ---
 
-## Prompt B — Generate a serving layer view for a specific consumer
+## Prompt B — Generate a serving layer shape for a specific consumer
 
 ```
-I need to build a serving layer SQL view for the following consumer:
+I need to build a serving layer shape for the following consumer:
 
 Consumer: <name, e.g. "monthly revenue report">
 Needs:
@@ -46,12 +46,14 @@ Needs:
 - Filters: <what data they care about>
 - Sort: <any default ordering>
 
-My standardized layer tables are:
-<paste DDL for std_ tables>
+My standardized layer definition is:
+<paste storage definition for std_ tables>
 
 Generate:
-1. A SQL view or materialized view definition that serves this consumer
+1. A serving-layer shape that serves this consumer
 2. A TypeScript interface `<ConsumerName>Row` representing one row of the view
 3. A TypeScript function `query<ConsumerName>(db: DbClient, params: {...}): Promise<<ConsumerName>Row[]>`
    with the most common query parameters
+
+Do not generate SQL unless I explicitly ask for SQL.
 ```

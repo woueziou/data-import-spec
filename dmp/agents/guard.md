@@ -7,6 +7,8 @@ Create:
 - ambiguity log
 - drift rules
 - quality checks
+- parser blockers
+- low-confidence classification follow-ups
 - consumer validation gaps
 
 Loop back when the source changes or a rule fails.

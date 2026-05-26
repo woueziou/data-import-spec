@@ -6,11 +6,11 @@
 
 | Agent | Command | Job |
 |---|---|---|
-| Pathfinder | `/dmp-intake` | Ask for the target path/location, capture source basics, and record schema preferences |
-| Cataloger | `/dmp-discover` | Inventory and profile raw data |
-| Mapper | `/dmp-model` | Build provisional schema, entities, layers, and naming rules |
+| Pathfinder | `/dmp-intake` | Ask for the target path/location, target database, source basics, and schema preferences |
+| Cataloger | `/dmp-discover` | Inventory and profile raw data, including file names, data nature, sample row counts, and record structure |
+| Mapper | `/dmp-model` | Build a provisional schema and parser contract from the submitted samples |
 | Sentinel | `/dmp-guard` | Track uncertainty, drift, validation, and quality |
-| Builder | `/dmp-serve` | Design the database model and serving shape |
+| Builder | `/dmp-serve` | Design the relational storage plan and parser-to-database handoff |
 
 ## Start Rule
 
@@ -57,9 +57,37 @@ Capture preferences such as:
 - preferred timestamp/date formats
 - ID/key naming style
 - schema grouping or layer expectations
+- target relational database
 
 Record those decisions in `_dmp_output/<workflow-id>/context.md` and
 `decisions.md` so `/dmp-model` can use them as constraints.
+
+## Workflow Goal
+
+The workflow solves this problem:
+
+Given undocumented text sample data, determine how to parse it and store it in
+a relational database.
+
+The required handoff is not just a schema. It must include enough parser-level
+detail to implement ingestion from the submitted samples with minimal guessing,
+while making downstream relational storage easier.
+
+Discovery should also identify the likely nature of the data and record the
+confidence of that classification. If confidence is low or ambiguity remains,
+the agent may ask the user for more context before proceeding.
+
+Required parser handoff artifacts:
+- `artifacts/parser-spec.md`
+- `artifacts/output-contract.md`
+- `artifacts/logging-contract.md`
+
+When the workflow reaches the final implementation handoff, ask the user:
+- which language to use for the parser
+- where to create the parser script
+
+Do not emit SQL or migration code in workflow artifacts unless the user
+explicitly asks for SQL.
 
 ## Loop
 

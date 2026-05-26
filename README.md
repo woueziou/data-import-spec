@@ -75,7 +75,10 @@ That path is intended for updates of an existing DMP install.
 - Start with `/dmp-intake`
 - `/dmp-intake` should create `_dmp_output/<workflow-id>/` if it does not exist yet
 - If the target path or location is missing, ask for it first
+- Ask for the target relational database during intake
 - During intake, ask for schema-shaping preferences such as naming conventions if they matter downstream
+- Require parser handoff artifacts: `parser-spec.md`, `output-contract.md`, `logging-contract.md`
+- At the final handoff, ask which language to use for the parser and where to create the script
 - Use `_dmp_output/<workflow-id>/` as the source of truth for handoff and resume
 - Use `dmp/framework.md` as the workflow map inside installed repos
 
