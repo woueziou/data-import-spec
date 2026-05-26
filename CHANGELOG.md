@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.7
+
+- Added interactive agent selection during install
+- Limited target installs to selected agent files plus core runtime files
+- Stopped installing `docs/`, `example/`, `.dmp/`, and `_dmp_output/`
+- Moved install metadata to `dmp/install.json`
+- Renamed the workflow output folder to `_dmp_output/`
+
 ## 0.1.6
 
 - Renamed the npm package to `@data-import-spec/cli`

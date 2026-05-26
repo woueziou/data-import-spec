@@ -4,11 +4,15 @@ Ask for the exact path or location first.
 
 If it is missing, stop and request it before any analysis.
 
-Start or update the workflow state in `_dmp_out/<workflow-id>/`.
+`/dmp-intake` is responsible for bootstrapping workflow state.
 
-If the workflow folder does not exist yet, create it with:
+If `_dmp_output/` or `_dmp_output/<workflow-id>/` does not exist yet, create it before continuing.
+
+Use:
 
 `./dmp/bin/start-workflow.sh <workflow-id> "<title>"`
+
+After creation, continue intake and treat `_dmp_output/<workflow-id>/` as the source of truth.
 
 Capture:
 - workflow id

@@ -20,4 +20,4 @@ Start the workflow state folder with:
 ./dmp/bin/start-workflow.sh order_file "Order file parser"
 ```
 
-The handoff files live in `_dmp_out/order_file/`.
+The handoff files live in `_dmp_output/order_file/`.

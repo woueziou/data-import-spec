@@ -35,7 +35,7 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
-STATE_DIR="${DMP_OUT_DIR:-$REPO_DIR/_dmp_out}"
+STATE_DIR="${DMP_OUT_DIR:-$REPO_DIR/_dmp_output}"
 WORKFLOW_ID="$1"
 shift
 TITLE="${*:-$WORKFLOW_ID}"
