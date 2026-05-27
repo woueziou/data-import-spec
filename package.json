@@ -1,6 +1,6 @@
 {
   "name": "@petadata/parser",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "DMP data import framework for undocumented sources",
   "license": "MIT",
   "bin": {
