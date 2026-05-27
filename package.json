@@ -3,6 +3,10 @@
   "version": "0.1.8",
   "description": "DMP data import framework for undocumented sources",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/woueziou/data-import-spec.git"
+  },
   "bin": {
     "dmp": "./bin/dmp.js"
   },
