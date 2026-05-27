@@ -31,22 +31,25 @@ Output as a JSON object:
 
 ---
 
-## Prompt B — Generate a TypeScript entity model
+## Prompt B — Generate a canonical entity model
 
 ```
 Based on the following entity analysis:
 
 <paste entity JSON from Prompt A>
 
-Generate TypeScript interfaces for each canonical entity. Requirements:
+Generate a canonical entity model in JSON or Markdown. Requirements:
 - Use the most descriptive name found across sources
 - Include all fields that appear in at least one source
-- Mark fields optional (?) if they only appear in some sources
-- Add a JSDoc comment on each field indicating which source(s) provide it
-- Add an `id` field of type string as the canonical identifier
+- Mark fields as optional when they only appear in some sources
+- Note which source(s) provide each field
+- Add an `id` field as the canonical identifier
 
-Also generate a `SourceMapping` type per entity showing how to map each
-source's raw record to the canonical entity interface.
+Also generate a source-mapping table per entity showing how each source maps
+to the canonical entity model.
+
+If a code example would help, include one short NON-PRODUCTION EXAMPLE in
+<user-language-or-Python-default> and label it as illustrative only.
 ```
 
 ---
@@ -64,7 +67,7 @@ Source C — cust_ref: <paste 10 sample values>
 Please:
 1. Classify the format of each (numeric, alphanumeric, UUID, prefixed, etc.)
 2. Determine if any of these could refer to the same underlying entity
-3. If formats differ, propose a normalization function to make them comparable
-4. Write a TypeScript function `normalizeCustomerId(raw: string, source: string): string`
-   that handles all three formats and returns a canonical string ID
+3. If formats differ, propose a normalization policy to make them comparable
+4. If helpful, add one short NON-PRODUCTION EXAMPLE in
+   <user-language-or-Python-default> showing the normalization logic at a high level
 ```

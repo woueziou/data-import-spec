@@ -1,9 +1,9 @@
 # Step 10 — AI Prompts
 
-## Prompt A — Generate a relational storage plan
+## Prompt A — Generate an implementation roadmap
 
 ```
-I need a relational storage plan for the following undocumented data sources
+I need an implementation roadmap for the following undocumented data sources
 and entities.
 
 Sources:
@@ -13,54 +13,85 @@ Canonical entities identified:
 <list entities from step 4>
 
 Consumer requirements:
-<list serving layer needs from step 9>
-
-Target database:
-<name the relational database>
+<list handoff-layer or consumer-facing needs from step 9>
 
 Generate:
-1. A raw/staging/canonical/serving storage outline
-2. Recommended tables or collections of columns by layer
-3. Key and relationship decisions
-4. A parser-to-database mapping strategy
+1. Recommended build phases
+2. Key dependencies between phases
+3. Validation checkpoints for each phase
+4. High-risk areas that should be implemented first
 5. A brief summary of design decisions made
 
-Do not generate SQL.
+Do not generate executable code.
 ```
 
 ---
 
-## Prompt B — Generate SQL only when explicitly requested
+## Prompt B — Generate an artifact cross-reference matrix
 
 ```
-I explicitly want SQL for the following storage plan:
-<paste storage plan>
+I have the following artifact set:
+<paste file analysis report, schema/model, parsing strategy, guardrails, risk matrix, and examples summary>
 
-Target database:
-<name the relational database>
-
-Generate SQL/DDL for that database based on the storage plan.
+Generate a matrix that maps:
+- each artifact
+- the implementation questions it answers
+- the remaining open questions
+- the validation checks it enables
 ```
 
 ---
 
-## Prompt C — Generate a migration file only when explicitly requested
+## Prompt C — Generate an implementation readiness checklist
 
 ```
-I explicitly want a migration for the following relational database:
-<name the relational database>
+I have a nearly complete DMP artifact pack.
 
-Current state:
-<paste current DDL or describe current tables>
+Generate an implementation readiness checklist that covers:
+1. Missing evidence or unresolved ambiguity
+2. Required validation datasets
+3. Performance questions to test
+4. Observability and failure-handling needs
+5. Conditions that must be true before production implementation begins
+```
 
-Target state:
-<paste target DDL>
+---
 
-Generate a migration script that:
-1. Creates all new tables
-2. Adds all new columns to existing tables (with safe defaults for NOT NULL)
-3. Creates all new indexes
-4. Does NOT drop anything (additive migration only)
-5. Is wrapped in a transaction (BEGIN / COMMIT)
-6. Includes a rollback section as a comment
+## Prompt D — Generate an implementation prompt sample
+
+```
+I have a complete DMP artifact pack and I want a reusable prompt that another
+LLM or developer can use in a separate implementation phase to build the
+parser.
+
+Artifacts available:
+- file-analysis-report.md
+- data-schema.md
+- parsing-strategy-guide.md
+- best-practices-and-guardrails.md
+- examples.md
+- dos-and-donts.md
+- edge-cases-and-risk-matrix.md
+- implementation-roadmap.md
+
+Preferred implementation language:
+<language or "Python by default">
+
+Preferred parser packages or libraries:
+<list packages/libraries or "none specified">
+
+Target output path:
+<target path or "to be decided">
+
+Generate `implementation-prompt.md` that:
+1. States the artifacts are the source of truth, in priority order
+2. Tells the implementation-phase LLM not to invent rules, fields, or formats
+3. Tells it to stop and report conflicts instead of guessing
+4. Tells it to honor any preferred parser packages or libraries captured during intake
+5. Tells it to implement documented tests, validation, and failure modes
+6. Tells it to summarize which artifact sections drove major implementation decisions
+7. Tells it to list unresolved gaps and the smallest safe assumptions
+8. Includes a short execution plan for reading artifacts, implementing, testing, and reporting ambiguity
+
+The output must be a prompt artifact only. Do not generate code.
 ```

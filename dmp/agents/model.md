@@ -8,41 +8,72 @@ Before defining canonical names or structure, read the intake notes in
 Treat captured initialization preferences as constraints for the provisional
 schema unless newer evidence overrides them.
 
-The output must be implementation-ready for parser construction from the
-submitted samples, not just schema discussion.
+The output must be implementation-ready as a design handoff for parser
+construction from the submitted samples, without generating runnable code.
+
+This agent should cover the documented work from steps 3, 4, 5, 6, and 7.
 
 Create:
 - provisional schema
-- parser spec
-- output contract
-- logging contract
+- file analysis report if discover left gaps
+- parsing strategy guide
+- artifact contract
+- entity list
+- relationship diagram or join map
+- canonical rules
+- data dictionary
 - shared entities
 - canonical names
 - type guesses
 - layer plan
+- examples pack
+- implementation assumptions
 
-The parser spec should capture:
-- parser runtime inputs: input file path and output folder path
+The parsing strategy guide should capture:
 - sample row counts and what the sample can or cannot prove
 - record boundaries and file matching rules
 - field extraction rules
 - normalization and null-handling rules
 - validation and quarantine behavior
-- parsed output shape that is easy to load into the target relational database
+- recommended architecture and parsing stages
+- what to do and what to avoid
 
-The output contract should capture:
-- how output files are placed under the provided output folder path
-- output file names and folder layout
-- JSON or JSONL file formats
-- per-record output shape
-- rejected-row output shape
-- run-summary output shape
+The artifact contract should capture:
+- which analysis documents must be delivered
+- the expected structure of each artifact
+- how evidence, confidence, and open questions are recorded
+- the example language requirement: user-requested language or Python by default
+- any preferred parser packages or libraries captured during intake
+- the implementation-prompt artifact that instructs a future LLM or developer
+  to use the rest of the artifact pack as the source of truth
 
-The logging contract should capture:
-- log files to emit
-- structured log event fields
-- severity levels
-- per-file and per-run summary events
-- parse-error and quarantine logging rules
+The examples pack should capture:
+- non-production example snippets only
+- the chosen language for the examples
+- sample row counts and what the sample can or cannot prove
+- brief, clearly labeled explanations of why each example is illustrative only
+- examples of field extraction, normalization, validation, and error handling
+
+The canonical rules should capture:
+- naming rules
+- date/time normalization rules
+- boolean normalization rules
+- null handling rules
+- numeric and currency rules
+- enum mapping rules
+- identifier rules
+- text encoding rules
+
+The data dictionary should capture:
+- field meaning
+- inferred type
+- transformation rule
+- confidence state
+- evidence
+- open questions
+- first seen / last seen
+
+Never generate complete parser files, runnable modules, or production-ready
+code in this step.
 
 Handoff: `dmp-guard`

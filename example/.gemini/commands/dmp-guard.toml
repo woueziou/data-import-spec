@@ -1,4 +1,0 @@
-description = "Track uncertainty, drift, validation, and quality."
-prompt = """
-Follow `dmp/agents/guard.md` and keep the response structured.
-"""

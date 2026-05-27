@@ -1,4 +1,0 @@
-description = "Design the final database model and serving shape."
-prompt = """
-Follow `dmp/agents/serve.md` and keep the response structured.
-"""

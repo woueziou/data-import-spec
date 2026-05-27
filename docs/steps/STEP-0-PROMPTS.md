@@ -7,17 +7,20 @@ I need to start a data import workflow.
 
 Ask me for the exact target data path or location first.
 If I only give a vague description, keep asking until you have:
-- file/folder/bucket/URL/database location
-- target relational database
+- file/folder/bucket/URL/other source location
 - source name
 - access mode
 - sample path
 
 Then ask for any schema-shaping preferences that should be honored later, such as:
-- naming convention for tables/columns
+- naming convention for fields/artifacts
 - singular vs plural entity naming
 - timestamp/date format expectations
 - ID/key naming style
+- preferred language for illustrative examples
+- preferred parser packages or libraries, such as date handling or CSV libraries
+
+If I do not specify an example language, note that Python will be used by default.
 ```
 
 ---
@@ -32,11 +35,12 @@ Using this target data information:
 Create a short intake note with:
 - source name
 - target location
-- target database
 - access mode
 - owner
 - sample path
 - schema preferences
+- preferred example language
+- preferred parser packages or libraries
 - risks
 - next agent to run
 ```
@@ -52,9 +56,10 @@ Summarize this target source for the next DMP agent.
 
 Return:
 - target location
-- target database
 - source type
 - schema preferences
+- preferred example language
+- preferred parser packages or libraries
 - known constraints
 - missing info
 - next step

@@ -1,16 +1,17 @@
-# Step 9 — Validate with Data Consumers
+# Step 9 — Validate with Downstream Consumers
 
 ## What this step is
 
-Before finalizing your schema and database design, you talk to the people
+Before finalizing your schema and parser design, you talk to the people
 or systems that will use the data. You show them what you've found and ask
 whether it meets their needs.
 
 ## Why it matters
 
 It is easy to over-optimize for ingestion convenience and under-optimize
-for the downstream uses the data will serve. A schema that stores data
-faithfully but makes reporting queries impossible is a bad schema.
+for the downstream uses the data will serve. A schema that preserves the data
+but cannot support the intended parser behavior or consumer expectations is a
+bad schema.
 
 Do this step early — not after you've built everything.
 
@@ -19,8 +20,8 @@ Do this step early — not after you've built everything.
 | Consumer type | What they need |
 |---------------|---------------|
 | Reporting / BI | Aggregatable fields, consistent types, date dimensions |
-| Operational lookup | Fast single-record access by ID, low latency |
-| Audit / compliance | Full history, timestamps, who changed what |
+| Operational lookup | Stable identifiers and predictable field semantics |
+| Audit / compliance | Full history, timestamps, provenance notes |
 | ML / feature engineering | Numeric features, no nulls, normalized values |
 | Search | Full-text fields, denormalized labels |
 | API / product | Specific fields by entity, consistent naming |
@@ -49,4 +50,4 @@ For each consumer:
 - A consumer requirements table: one row per consumer, columns for each
   requirement
 - A gap analysis: requirements that your current schema doesn't yet satisfy
-- Updates to the serving layer plan from step 5
+- Updates to the handoff layer plan from step 5

@@ -40,10 +40,18 @@ read_json_agents() {
   sed -n 's/.*"selectedAgents": \[\(.*\)\].*/\1/p' "$INSTALL_FILE" | tr -d '"' | tr -d ' '
 }
 
+read_json_providers() {
+  sed -n 's/.*"selectedProviders": \[\(.*\)\].*/\1/p' "$INSTALL_FILE" | tr -d '"' | tr -d ' '
+}
+
 SOURCE_MODE="$(read_json_field sourceMode)"
 SOURCE_REPO="$(read_json_field sourceRepo)"
 SOURCE_REF="$(read_json_field sourceRef)"
 SELECTED_AGENTS="$(read_json_agents)"
+SELECTED_PROVIDERS="$(read_json_providers)"
+if [[ -z "$SELECTED_PROVIDERS" ]]; then
+  SELECTED_PROVIDERS="copilot,gemini,claude,kilo,antigravity"
+fi
 
 if [[ "$SOURCE_MODE" == "github" ]]; then
   TMP_DIR="$(mktemp -d /private/tmp/dmp-github-reinstall.XXXXXX)"
@@ -51,10 +59,10 @@ if [[ "$SOURCE_MODE" == "github" ]]; then
   git clone --depth 1 --branch "$SOURCE_REF" "https://github.com/$SOURCE_REPO.git" "$TMP_DIR/source"
   INSTALLER="$TMP_DIR/source/scripts/install.sh"
   if [[ "$FORCE" -eq 1 ]]; then
-    exec env DMP_SOURCE_MODE=github DMP_SOURCE_REPO="$SOURCE_REPO" DMP_SOURCE_REF="$SOURCE_REF" DMP_SELECTED_AGENTS="$SELECTED_AGENTS" \
+    exec env DMP_SOURCE_MODE=github DMP_SOURCE_REPO="$SOURCE_REPO" DMP_SOURCE_REF="$SOURCE_REF" DMP_SELECTED_AGENTS="$SELECTED_AGENTS" DMP_SELECTED_PROVIDERS="$SELECTED_PROVIDERS" \
       "$INSTALLER" --force "$REPO_DIR"
   fi
-  exec env DMP_SOURCE_MODE=github DMP_SOURCE_REPO="$SOURCE_REPO" DMP_SOURCE_REF="$SOURCE_REF" DMP_SELECTED_AGENTS="$SELECTED_AGENTS" \
+  exec env DMP_SOURCE_MODE=github DMP_SOURCE_REPO="$SOURCE_REPO" DMP_SOURCE_REF="$SOURCE_REF" DMP_SELECTED_AGENTS="$SELECTED_AGENTS" DMP_SELECTED_PROVIDERS="$SELECTED_PROVIDERS" \
     "$INSTALLER" "$REPO_DIR"
 fi
 
@@ -66,7 +74,7 @@ if [[ ! -x "$INSTALLER" ]]; then
 fi
 
 if [[ "$FORCE" -eq 1 ]]; then
-  exec env DMP_SELECTED_AGENTS="$SELECTED_AGENTS" "$INSTALLER" --force "$REPO_DIR"
+  exec env DMP_SELECTED_AGENTS="$SELECTED_AGENTS" DMP_SELECTED_PROVIDERS="$SELECTED_PROVIDERS" "$INSTALLER" --force "$REPO_DIR"
 fi
 
-exec env DMP_SELECTED_AGENTS="$SELECTED_AGENTS" "$INSTALLER" "$REPO_DIR"
+exec env DMP_SELECTED_AGENTS="$SELECTED_AGENTS" DMP_SELECTED_PROVIDERS="$SELECTED_PROVIDERS" "$INSTALLER" "$REPO_DIR"

@@ -1,9 +1,8 @@
-AGENTS.md|AGENTS.md
-GEMINI.md|GEMINI.md
+dmp/AGENTS.md|dmp/AGENTS.md
 docs|docs
 dmp|dmp
 .github/agents|.github/agents
 .gemini/commands|.gemini/commands
 .kilo/skills|.kilo/skills
 .claude/commands|.claude/commands
-_agents/plugins/dmp|.agents/plugins/dmp
+_agents/workflows|.agents/workflows

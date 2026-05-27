@@ -23,27 +23,27 @@ Output the column layout as a JSON array with objects:
 
 ---
 
-## Prompt B — Write a TypeScript fixed-width parser
+## Prompt B — Describe a fixed-width parsing approach
 
 ```
 I have a fixed-width file with the following column layout:
 
 <paste the JSON column layout from Prompt A>
 
-Write a TypeScript function `parseFixedWidthLine(line: string)` that:
+Describe a parsing approach that:
 - Takes a raw string line as input
 - Extracts each field based on the character offsets
 - Trims whitespace from each field
-- Returns a typed object with field names I'll provide below
-- Handles lines that are shorter than expected (pad with empty string)
+- Handles lines that are shorter than expected
+- Records where boundary confidence is weak
 
 Field names to use: <list your field names>
 
-Also write a function `parseFixedWidthFile(content: string)` that:
-- Splits on newlines
-- Skips the header line if present (boolean parameter)
-- Calls parseFixedWidthLine on each remaining line
-- Returns an array of parsed records
+Then provide one short NON-PRODUCTION EXAMPLE in
+<user-language-or-Python-default> showing the extraction flow.
+
+The example must be illustrative only, incomplete on purpose, and clearly
+labeled as non-executable guidance.
 ```
 
 ---

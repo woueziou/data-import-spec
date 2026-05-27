@@ -1,4 +1,0 @@
-description = "Build the provisional schema and naming rules."
-prompt = """
-Follow `dmp/agents/model.md` and keep the response structured.
-"""

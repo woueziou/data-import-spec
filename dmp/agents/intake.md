@@ -16,12 +16,13 @@ After creation, continue intake and treat `_dmp_output/<workflow-id>/` as the so
 
 During initialization, ask short clarifying questions when the answers will
 shape later schema design. Typical examples:
-- naming convention for tables and columns
+- naming convention for fields and artifacts
 - singular vs plural entity names
 - timestamp/date formatting expectations
 - ID/key naming style
 - preferred schema layers or grouping
-- target relational database
+- preferred language for illustrative examples
+- preferred parser packages or libraries the user wants used later
 
 Do not guess these if the user already has standards. Capture them once and
 reuse them downstream.
@@ -35,7 +36,9 @@ Capture:
 - owner
 - cadence
 - sensitivity
-- target database
+- downstream consumers or constraints
+- preferred example language
+- preferred parser packages or libraries
 - schema preferences
 - naming constraints
 
@@ -45,5 +48,8 @@ Write the current state into:
 - `decisions.md`
 - `tasks.md`
 - `next-step.md`
+
+Core rule:
+- this workflow produces analysis artifacts only, not executable parser code
 
 Handoff: `dmp-discover`

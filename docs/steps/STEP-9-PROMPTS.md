@@ -18,7 +18,7 @@ For each consumer:
    is a raw string)
 4. Identify granularity mismatches (e.g. consumer needs one row per customer,
    but data has one row per transaction)
-5. Suggest what serving layer table or view would serve this consumer
+5. Suggest what handoff artifact or consumer-facing shape would serve this consumer
 
 Output as a JSON array:
 {
@@ -27,17 +27,17 @@ Output as a JSON array:
     requiredFields: [{ fieldName, source, status: 'available' | 'missing' | 'ambiguous' }],
     typeIssues: [{ fieldName, consumerExpects, currentType }],
     granularityNote,
-    suggestedServingTable
+    suggestedArtifact
   }]
 }
 ```
 
 ---
 
-## Prompt B — Generate a serving layer shape for a specific consumer
+## Prompt B — Generate a consumer-facing data contract
 
 ```
-I need to build a serving layer shape for the following consumer:
+I need to build a consumer-facing data contract for the following consumer:
 
 Consumer: <name, e.g. "monthly revenue report">
 Needs:
@@ -46,14 +46,16 @@ Needs:
 - Filters: <what data they care about>
 - Sort: <any default ordering>
 
-My standardized layer definition is:
-<paste storage definition for std_ tables>
+My normalized data definition is:
+<paste normalized data definition>
 
 Generate:
-1. A serving-layer shape that serves this consumer
-2. A TypeScript interface `<ConsumerName>Row` representing one row of the view
-3. A TypeScript function `query<ConsumerName>(db: DbClient, params: {...}): Promise<<ConsumerName>Row[]>`
-   with the most common query parameters
+1. A consumer-facing shape that serves this consumer
+2. Required fields, types, and granularity
+3. Filtering and sorting expectations
+4. Risks, open questions, and missing inputs
+5. If helpful, one short NON-PRODUCTION EXAMPLE in
+   <user-language-or-Python-default> showing how a future consumer might read the shape
 
-Do not generate SQL unless I explicitly ask for SQL.
+Do not generate executable code.
 ```

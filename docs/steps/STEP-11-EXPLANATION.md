@@ -15,7 +15,7 @@ With undocumented sources, you will inevitably encounter:
 - Enum values you've never seen before
 
 Without quality rules, these silently corrupt your data. With rules, you
-catch them and can route bad records to a quarantine table for review.
+catch them and can route bad records into a documented review path.
 
 ## Types of rules
 
@@ -25,7 +25,7 @@ catch them and can route bad records to a quarantine table for review.
 | Uniqueness | No two records with the same `transaction_id` |
 | Valid range | `amount` must be between 0 and 10,000,000 |
 | Enum constraint | `status` must be one of `active`, `inactive`, `suspended` |
-| Referential integrity | `customer_id` must exist in the customers table |
+| Referential integrity | `customer_id` must exist in the reference source |
 | Format check | `email` must match email pattern |
 | Duplicate detection | Same `transaction_id` + `date` seen before → flag as duplicate |
 | Temporal sanity | `created_at` must not be in the future, must not be before 2000 |
@@ -35,13 +35,13 @@ catch them and can route bad records to a quarantine table for review.
 
 Don't silently drop them. Instead:
 
-1. Write the failing record to a `quarantine_<source>` table
+1. Write the failing record to a quarantine or review artifact
 2. Record which rule(s) failed
 3. Record the original raw content
 4. Allow manual review and reprocessing
 
 ## Output of this step
 
-- A quality rules definition (JSON or code)
-- A quarantine table schema
-- A validation function that applies all rules to a record
+- A quality rules definition
+- A quarantine and review contract
+- A validation approach description

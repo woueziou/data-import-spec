@@ -43,16 +43,15 @@ you a history of how your understanding evolved.
 One JSON or Markdown schema file per source, containing all fields.
 
 Also create a parser specification per source. It should document:
-- the parser runtime interface: input file path and output folder path
 - how many sample rows were analyzed
 - what the parser can infer confidently from that sample size
 - exact record/field extraction rules
 - normalization, null, and validation behavior
-- the parsed output shape that should feed the relational database load step
+- parser architecture recommendations
+- known unknowns and evidence gaps
 
 Also create:
-- an output contract that defines the JSON or JSONL files the parser will emit
-- a logging contract that defines parser logs, summaries, and error events
-
-The output contract should assume the parser writes all artifacts beneath a
-user-provided output folder path.
+- a formal schema or model artifact
+- a parsing strategy guide
+- a best-practices and guardrails artifact
+- an examples artifact containing illustrative snippets only

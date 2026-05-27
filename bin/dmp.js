@@ -15,9 +15,22 @@ const agentCatalog = [
   { id: 'serve', label: 'Builder', command: '/dmp-serve' },
 ];
 
+const providerCatalog = [
+  { id: 'copilot', label: 'Copilot', path: '.github/agents/' },
+  { id: 'gemini', label: 'Gemini CLI', path: '.gemini/commands/' },
+  { id: 'claude', label: 'Claude/cmd', path: '.claude/commands/' },
+  { id: 'kilo', label: 'Kilo', path: '.kilo/skills/' },
+  { id: 'antigravity', label: 'Antigravity CLI', path: '.agents/workflows/' },
+];
+
+const providerAliases = new Map([
+  ['agy', 'antigravity'],
+]);
+
 function parseArgs(argv) {
   let force = false;
   let agents = null;
+  let providers = null;
   let target = null;
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -35,6 +48,15 @@ function parseArgs(argv) {
       agents = arg.split('=', 2)[1];
       continue;
     }
+    if (arg === '--providers' && argv[i + 1]) {
+      providers = argv[i + 1];
+      i += 1;
+      continue;
+    }
+    if (arg.startsWith('--providers=')) {
+      providers = arg.split('=', 2)[1];
+      continue;
+    }
     if (arg === '--help' || arg === '-h') {
       printHelp();
       process.exit(0);
@@ -42,11 +64,11 @@ function parseArgs(argv) {
     target = arg;
   }
 
-  return { force, agents, target };
+  return { force, agents, providers, target };
 }
 
 function printHelp() {
-  console.log('Usage: dmp [--force] [--agents intake,discover,...] [target-repo]');
+  console.log('Usage: dmp [--force] [--agents intake,discover,...] [--providers copilot,gemini,...] [target-repo]');
 }
 
 function prompt(question) {
@@ -108,13 +130,63 @@ async function chooseAgents(parsed) {
   return selected;
 }
 
+function normalizeProviders(input) {
+  if (!input || input.toLowerCase() === 'all') {
+    return providerCatalog.map((provider) => provider.id);
+  }
+
+  const indexMap = new Map(providerCatalog.map((provider, index) => [String(index + 1), provider.id]));
+  const allowed = new Set(providerCatalog.map((provider) => provider.id));
+
+  const selected = input
+    .split(',')
+    .map((part) => part.trim().toLowerCase())
+    .filter(Boolean)
+    .map((part) => {
+      const normalized = indexMap.get(part) || part;
+      return providerAliases.get(normalized) || normalized;
+    })
+    .filter((part) => allowed.has(part));
+
+  if (selected.length === 0) {
+    return null;
+  }
+
+  return [...new Set(selected)];
+}
+
+async function chooseProviders(parsed) {
+  if (parsed.providers) {
+    const selected = normalizeProviders(parsed.providers);
+    if (!selected) {
+      throw new Error('No valid providers were selected.');
+    }
+    return selected;
+  }
+
+  console.log('Select the provider surfaces to install:');
+  providerCatalog.forEach((provider, index) => {
+    console.log(`${index + 1}. ${provider.label} ${provider.path}`);
+  });
+  console.log('Enter comma-separated numbers or ids. Press Enter for all.');
+
+  const answer = await prompt('Providers: ');
+  const selected = normalizeProviders(answer || 'all');
+  if (!selected) {
+    throw new Error('No valid providers were selected.');
+  }
+  return selected;
+}
+
 async function main() {
   const parsed = parseArgs(args);
   const selectedAgents = await chooseAgents(parsed);
+  const selectedProviders = await chooseProviders(parsed);
 
   const env = {
     ...process.env,
     DMP_SELECTED_AGENTS: selectedAgents.join(','),
+    DMP_SELECTED_PROVIDERS: selectedProviders.join(','),
   };
 
   const installerArgs = [];

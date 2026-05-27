@@ -107,18 +107,20 @@ cat > "$WORKFLOW_DIR/context.md" <<EOF
 - Workflow id: \`$WORKFLOW_ID\`
 - Title: $TITLE
 - Target path: ${TARGET_PATH:-<fill during /dmp-intake>}
-- Target database: unknown
 - Source type: unknown
 - Owner: unknown
 - Sample path: unknown
 - Cadence: unknown
 - Sensitivity: unknown
+- Preferred example language: Python (default until changed)
+- Preferred parser packages/libraries: unknown
+- Downstream consumers: unknown
 - Current step: intake
 
 ## Schema preferences
 
-- Table naming convention: unknown
-- Column naming convention: unknown
+- Field naming convention: unknown
+- Artifact naming convention: unknown
 - Entity naming style: unknown
 - Timestamp/date format: unknown
 - ID/key naming style: unknown
@@ -126,23 +128,25 @@ cat > "$WORKFLOW_DIR/context.md" <<EOF
 
 ## Goal
 
-Given undocumented sample data, determine how to parse it and store it in a
-relational database.
+Given undocumented sample data, produce a comprehensive, non-executable
+analysis pack that enables a developer or another LLM to build a robust
+parser with minimal guessing.
 
 ## Current understanding
 
 - Add raw source details here.
 - Capture assumptions that another model should not have to rediscover.
 - Keep parser decisions tied to the submitted sample size and row counts.
-- The final parser script should accept an input file path and an output folder path.
+- Record where examples must stay illustrative rather than executable.
 
 ## Open questions
 
 - What is the exact target path or location?
-- What relational database is the target?
 - What format is the source?
 - Is there a stable sample file?
 - Are there naming or schema conventions that must be preserved?
+- Which language should illustrative examples use, if not Python?
+- Are there preferred parser packages or libraries that must be used later?
 EOF
 
 cat > "$WORKFLOW_DIR/searches.md" <<EOF
@@ -159,6 +163,8 @@ cat > "$WORKFLOW_DIR/searches.md" <<EOF
   versions, partitions, or regions.
 - Capture the likely nature of the data and the confidence of that judgment.
 - Record sample row counts and what those counts do or do not prove.
+- Record structural patterns such as flat records, repeated groups, nesting,
+  key-value sections, or hierarchical segments.
 - If classification confidence is low, record the follow-up questions that
   should be asked of the user.
 
@@ -171,16 +177,27 @@ cat > "$WORKFLOW_DIR/tasks.md" <<EOF
 # Tasks
 
 - [ ] Confirm the exact target path or location
-- [ ] Confirm the target relational database
 - [ ] Save a representative sample path in \`context.md\`
 - [ ] Capture schema and naming preferences during intake
+- [ ] Confirm the preferred language for illustrative examples, or keep the Python default
+- [ ] Ask whether the user wants specific parser packages or libraries used later
 - [ ] Run \`/dmp-discover\` and record findings in \`searches.md\`
-- [ ] Define the provisional schema
-- [ ] Write a parser specification in \`artifacts/parser-spec.md\`
-- [ ] Write an output contract in \`artifacts/output-contract.md\`
-- [ ] Write a logging contract in \`artifacts/logging-contract.md\`
-- [ ] Write a storage plan without SQL unless the user asks for SQL
-- [ ] Ask the user which language to use for the parser and where to create the script
+- [ ] Produce a source catalog and file analysis report
+- [ ] Define the provisional schema and data model
+- [ ] Produce an entity list and join map
+- [ ] Write canonical rules and a data dictionary
+- [ ] Write \`artifacts/file-analysis-report.md\`
+- [ ] Write \`artifacts/data-schema.md\`
+- [ ] Write \`artifacts/parsing-strategy-guide.md\`
+- [ ] Write \`artifacts/best-practices-and-guardrails.md\`
+- [ ] Write \`artifacts/examples.md\`
+- [ ] Write \`artifacts/dos-and-donts.md\`
+- [ ] Write \`artifacts/edge-cases-and-risk-matrix.md\`
+- [ ] Write \`artifacts/implementation-roadmap.md\`
+- [ ] Write \`artifacts/implementation-prompt.md\`
+- [ ] Define drift detection, schema versioning, and validation rules
+- [ ] Define consumer requirements and implementation gaps
+- [ ] Record why every code example is illustrative only
 - [ ] Write the next handoff in \`next-step.md\`
 EOF
 
@@ -191,7 +208,9 @@ cat > "$WORKFLOW_DIR/decisions.md" <<EOF
 
 - Record parser, schema, naming, and quality decisions here.
 - Record any intake-time preferences that constrain schema design.
-- Record database-target decisions and whether SQL was explicitly requested.
+- Record example-language decisions and whether Python defaulting was used.
+- Record preferred parser packages or libraries captured during intake.
+- Record any request for follow-on implementation outside the DMP workflow.
 
 ## Rejected options
 
@@ -206,8 +225,8 @@ Run \`/dmp-intake\`.
 ## What to do now
 
 1. Confirm the exact target file or location.
-2. Confirm the target relational database.
-3. Capture any schema or naming preferences in \`context.md\` and \`decisions.md\`.
+2. Confirm the representative sample path.
+3. Capture any schema, naming, example-language, or preferred package/library preferences in \`context.md\` and \`decisions.md\`.
 4. Update \`context.md\` with the source details.
 5. Add any raw inspection evidence to \`searches.md\`.
 6. Move the workflow forward to \`/dmp-discover\`.
@@ -221,33 +240,29 @@ EOF
 cat > "$WORKFLOW_DIR/artifacts/README.md" <<'EOF'
 # Artifacts
 
-Store generated schemas, parser specs, output contracts, logging contracts,
-storage plans, sample extracts, and validation outputs for this workflow here.
+Store generated analysis reports, schemas, parsing guides, guardrails,
+examples, and roadmap documents for this workflow here.
 
-Do not store SQL, DDL, or migration files here unless the user explicitly
-asked for SQL output.
+Do not store runnable parser modules, complete scripts, SQL, DDL, or
+migration files here. They belong outside the DMP workflow.
 
 ## Suggested read order
 
-1. `parser-spec.md` — parser behavior, runtime inputs, and parse rules
-2. `output-contract.md` — expected JSON/JSONL outputs beneath the output folder
-3. `logging-contract.md` — expected log files and event shapes
-4. storage-plan artifact — how parsed output should land in the target database
+1. `file-analysis-report.md` — format, patterns, anomalies, and confidence
+2. `data-schema.md` — formal structures and field definitions
+3. `parsing-strategy-guide.md` — recommended architecture and parse steps
+4. `best-practices-and-guardrails.md` — safety, validation, and maintainability rules
+5. `examples.md` — non-production examples only, in the chosen language
+6. `dos-and-donts.md` — implementation guidance and anti-patterns
+7. `edge-cases-and-risk-matrix.md` — pitfalls, risks, and mitigations
+8. `implementation-roadmap.md` — build order, checkpoints, and validation milestones
+9. `implementation-prompt.md` — reusable prompt for a separate parser implementation phase
 
-## Before implementing the parser
+## Example policy
 
-Confirm with the user:
-- which language to use for the parser
-- where to create the parser script
-
-## Implementation starting point
-
-The final parser script should:
-- accept an input file path
-- accept an output folder path
-- parse the input according to `parser-spec.md`
-- write outputs described in `output-contract.md`
-- write logs described in `logging-contract.md`
+- Use the user-requested language for examples.
+- If no language was requested, default to Python and say so explicitly.
+- Mark every snippet as illustrative and non-production.
 EOF
 
 printf 'Started workflow %s at %s\n' "$WORKFLOW_ID" "$WORKFLOW_DIR"

@@ -10,9 +10,7 @@
     "access": "public"
   },
   "files": [
-    "AGENTS.md",
     "CHANGELOG.md",
-    "GEMINI.md",
     "README.md",
     "VERSION",
     "bin",
@@ -27,6 +25,9 @@
     ".kilo",
     "_agents"
   ],
+  "scripts": {
+    "test": "cd example && bun test"
+  },
   "engines": {
     "node": ">=18"
   }

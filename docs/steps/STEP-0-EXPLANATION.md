@@ -8,7 +8,6 @@ up-front preferences that will affect schema structure later.
 ## What to capture
 
 - Target path or location
-- Target relational database
 - Source name
 - Access mode
 - Sample path
@@ -17,6 +16,8 @@ up-front preferences that will affect schema structure later.
 - Sensitivity
 - Naming convention preferences
 - Schema structure constraints
+- Preferred language for illustrative examples
+- Preferred parser packages or libraries, if the user already has standards
 
 ## Rule
 
@@ -26,5 +27,10 @@ If naming, entity, or schema conventions are likely to matter later, ask for
 them during intake and save them as workflow decisions instead of rediscovering
 them during modeling.
 
-If the target database is unknown, ask for it during intake. Storage guidance
-should adapt to the user's chosen relational database instead of assuming one.
+If the example language is unknown, ask for it during intake when it matters.
+If the user does not specify one, default to Python and state that default
+explicitly in later artifacts.
+
+If the user already knows which packages or libraries should be used in the
+future parser utility, capture them during intake and treat them as downstream
+implementation constraints.

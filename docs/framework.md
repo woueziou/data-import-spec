@@ -6,11 +6,11 @@
 
 | Agent | Command | Job |
 |---|---|---|
-| Pathfinder | `/dmp-intake` | Ask for the target path/location, target database, source basics, and schema preferences |
+| Pathfinder | `/dmp-intake` | Ask for the target path/location, source basics, constraints, and example-language preference |
 | Cataloger | `/dmp-discover` | Inventory and profile raw data, including file names, data nature, sample row counts, and record structure |
-| Mapper | `/dmp-model` | Build a provisional schema and parser contract from the submitted samples |
+| Mapper | `/dmp-model` | Build a provisional schema, parsing strategy, and artifact contract from the submitted samples |
 | Sentinel | `/dmp-guard` | Track uncertainty, drift, validation, and quality |
-| Builder | `/dmp-serve` | Design the relational storage plan and parser-to-database handoff |
+| Builder | `/dmp-serve` | Assemble the final analysis handoff and implementation roadmap |
 
 ## Start Rule
 
@@ -21,7 +21,7 @@ Use one of:
 - folder path
 - bucket path
 - endpoint URL
-- database source
+- other source location
 
 ## State
 
@@ -50,12 +50,13 @@ During `/dmp-intake`, the agent may ask short clarifying questions that affect
 downstream schema structure before discovery begins.
 
 Capture preferences such as:
-- naming convention for tables, fields, and files
+- naming convention for fields and artifacts
 - singular vs plural entity names
 - preferred timestamp/date formats
 - ID/key naming style
 - schema grouping or layer expectations
-- target relational database
+- preferred language for illustrative examples
+- preferred parser packages or libraries, such as date/time or CSV handling utilities
 
 Record those decisions in `_dmp_output/<workflow-id>/context.md` and
 `decisions.md` so `/dmp-model` can use them as constraints.
@@ -64,28 +65,37 @@ Record those decisions in `_dmp_output/<workflow-id>/context.md` and
 
 The workflow solves this problem:
 
-Given undocumented text sample data, determine how to parse it and store it in
-a relational database.
+Given undocumented text sample data, determine how a robust parser should be
+designed without generating executable parser code.
 
-The required handoff is not just a schema. It must include enough parser-level
-detail to implement ingestion from the submitted samples with minimal guessing,
-while making downstream relational storage easier.
+The required handoff is not just a schema. It must include enough file-level,
+record-level, and validation detail that a developer or another LLM can build
+the parser from the submitted samples with minimal guessing.
 
 Discovery should also identify the likely nature of the data and record the
 confidence of that classification. If confidence is low or ambiguity remains,
 the agent may ask the user for more context before proceeding.
 
-Required parser handoff artifacts:
-- `artifacts/parser-spec.md`
-- `artifacts/output-contract.md`
-- `artifacts/logging-contract.md`
+Core workflow rules:
+- never generate working, complete, or directly executable parser code
+- keep code-related content illustrative only
+- use the user-requested language for examples; default to Python if none was given
+- treat file names, sample limits, and anomalies as first-class evidence
 
-When the workflow reaches the final implementation handoff, ask the user:
-- which language to use for the parser
-- where to create the parser script
+Required handoff artifacts:
+- `artifacts/file-analysis-report.md`
+- `artifacts/data-schema.md`
+- `artifacts/parsing-strategy-guide.md`
+- `artifacts/best-practices-and-guardrails.md`
+- `artifacts/examples.md`
+- `artifacts/dos-and-donts.md`
+- `artifacts/edge-cases-and-risk-matrix.md`
+- `artifacts/implementation-roadmap.md`
+- `artifacts/implementation-prompt.md`
 
-Do not emit SQL or migration code in workflow artifacts unless the user
-explicitly asks for SQL.
+Do not emit SQL, migrations, or runnable parser modules in workflow artifacts.
+If the user later wants implementation, treat that as work outside the DMP
+workflow.
 
 ## Loop
 
@@ -95,7 +105,8 @@ When drift, ambiguity, or a new source appears, go back to the earliest relevant
 
 - Copilot: `.github/agents/dmp-*.agent.md`
 - Gemini CLI: `.gemini/commands/dmp-*.toml`
-- Antigravity source: `_agents/plugins/dmp/skills/dmp-*/SKILL.md`
-- Antigravity install target: `.agents/plugins/dmp/skills/dmp-*/SKILL.md`
+- Antigravity source: `_agents/workflows/dmp-*.md`
+- Antigravity workspace install target: `.agents/workflows/dmp-*.md`
+- Antigravity global install target: `~/.gemini/antigravity/global_workflows/dmp-*.md`
 - Kilo: `.kilo/skills/dmp-*/SKILL.md`
 - cmd: `.claude/commands/dmp-*.md`

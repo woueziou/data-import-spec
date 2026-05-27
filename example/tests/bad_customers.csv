@@ -1,0 +1,6 @@
+customer_id,full_name,email,status
+2001,Bad Email,bad-email,active
+2002,SingleWord,good@email.com,active
+2003,Invalid Status,good@email.com,pending
+2004,Invalid ID,good@email.com,active
+,Missing ID,good@email.com,active

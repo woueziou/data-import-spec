@@ -1,12 +1,12 @@
 # Step 11 — AI Prompts
 
-## Prompt A — Generate a TypeScript data quality rule engine
+## Prompt A — Generate a data quality rule catalog
 
 ```
-I need a data quality rule engine for the source <source-name>.
+I need a data quality rule catalog for the source <source-name>.
 
-The standardized record type is:
-<paste TypeScript interface>
+The normalized record definition is:
+<paste normalized record definition>
 
 The rules to enforce are:
 <list your rules, e.g.:
@@ -17,48 +17,33 @@ The rules to enforce are:
 - created_at: must not be in the future, must be after 2000-01-01
 >
 
-Generate a TypeScript module `qualityRules.ts` with:
+Generate:
+1. A rule catalog with severity, rationale, and action
+2. A decision table for pass, warn, quarantine, or skip
+3. A review note format for failed records
+4. If helpful, one short NON-PRODUCTION EXAMPLE in
+   <user-language-or-Python-default> showing how a future validator might apply one rule
 
-1. Type `QualityRule<T>`:
-   { name: string, check: (record: T) => boolean, message: string, severity: 'error' | 'warning' }
-
-2. Type `QualityResult`:
-   { passed: boolean, errors: string[], warnings: string[] }
-
-3. A function `applyRules<T>(record: T, rules: QualityRule<T>[]): QualityResult`
-
-4. An exported array `<SourceName>Rules: QualityRule<<SourceName>Standardized>[]`
-   implementing all the rules listed above
-
-5. A function `routeRecord<T>(record: T, result: QualityResult): 'insert' | 'quarantine' | 'skip'`
-   - 'insert' if no errors
-   - 'quarantine' if any errors
-   - 'skip' if a rule with severity 'error' fails and is marked as unrecoverable
+The example must be illustrative only, incomplete on purpose, and clearly
+labeled as non-executable guidance.
 ```
 
 ---
 
-## Prompt B — Generate a quarantine table and TypeScript insert function
+## Prompt B — Generate a quarantine and review contract
 
 ```
-I need a quarantine table in PostgreSQL for records that fail quality checks.
+I need a quarantine and review contract for records that fail quality checks.
 
-The source is called <source-name>. The standardized record interface is:
-<paste interface>
+The source is called <source-name>. The normalized record definition is:
+<paste definition>
 
 Generate:
-1. A SQL CREATE TABLE statement for `quarantine_<source_name>` with columns:
-   - id (UUID PK)
-   - raw_id (UUID, FK to raw_<source_name>)
-   - failed_rules (TEXT[] — names of rules that failed)
-   - error_messages (TEXT[] — human-readable error messages)
-   - record_snapshot (JSONB — the standardized record at the time of failure)
-   - quarantined_at (TIMESTAMPTZ)
-   - resolved_at (TIMESTAMPTZ, nullable)
-   - resolution_notes (TEXT, nullable)
+1. The fields that must be captured for a failed record
+2. The lifecycle states for review and resolution
+3. The information needed to reprocess a quarantined record
+4. If helpful, one short NON-PRODUCTION EXAMPLE in
+   <user-language-or-Python-default> showing the review flow at a high level
 
-2. A TypeScript function `quarantineRecord(rawId: string, record: unknown, result: QualityResult, db: DbClient): Promise<void>`
-
-3. A TypeScript function `resolveQuarantined(id: string, notes: string, db: DbClient): Promise<void>`
-   that marks a quarantined record as resolved
+Do not generate SQL or executable code.
 ```
