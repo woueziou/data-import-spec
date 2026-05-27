@@ -25,6 +25,9 @@
     ".kilo",
     "_agents"
   ],
+  "scripts": {
+    "test": "cd example && bun test"
+  },
   "engines": {
     "node": ">=18"
   }
