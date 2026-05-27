@@ -76,7 +76,7 @@ has_provider() {
   IFS=','
   for provider in $SELECTED_PROVIDERS; do
     provider="$(printf '%s' "$provider" | tr -d '[:space:]')"
-    if [[ "$provider" == "$wanted" ]]; then
+    if [[ "$provider" == "$wanted" || ( "$wanted" == "antigravity" && "$provider" == "agy" ) || ( "$wanted" == "agy" && "$provider" == "antigravity" ) ]]; then
       IFS="$OLD_IFS"
       return 0
     fi
@@ -86,9 +86,7 @@ has_provider() {
 }
 
 copy_provider_core() {
-  if has_provider "gemini"; then
-    copy_file "GEMINI.md" "GEMINI.md"
-  fi
+  :
 }
 
 copy_agent() {
@@ -107,15 +105,11 @@ copy_agent() {
     copy_file ".kilo/skills/dmp-$agent/SKILL.md" ".kilo/skills/dmp-$agent/SKILL.md"
   fi
   if has_provider "antigravity"; then
-    copy_file "_agents/plugins/dmp/plugin.json" ".agents/plugins/dmp/plugin.json"
-    copy_file "_agents/plugins/dmp/skills/dmp-$agent/SKILL.md" ".agents/plugins/dmp/skills/dmp-$agent/SKILL.md"
+    copy_file "_agents/workflows/dmp-$agent.md" ".agents/workflows/dmp-$agent.md"
   fi
 }
 
 guard_root_file "dmp/AGENTS.md"
-if has_provider "gemini"; then
-  guard_root_file "GEMINI.md"
-fi
 
 copy_core
 copy_provider_core

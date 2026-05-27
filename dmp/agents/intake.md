@@ -22,6 +22,7 @@ shape later schema design. Typical examples:
 - ID/key naming style
 - preferred schema layers or grouping
 - preferred language for illustrative examples
+- preferred parser packages or libraries the user wants used later
 
 Do not guess these if the user already has standards. Capture them once and
 reuse them downstream.
@@ -37,6 +38,7 @@ Capture:
 - sensitivity
 - downstream consumers or constraints
 - preferred example language
+- preferred parser packages or libraries
 - schema preferences
 - naming constraints
 

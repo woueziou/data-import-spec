@@ -3,6 +3,7 @@
 ## Framework
 
 - [Workflow map](framework.md)
+- [Implementation prompt sample](implementation-prompt-sample.md)
 
 ## Steps
 

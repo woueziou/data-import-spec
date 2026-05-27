@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Accepted `agy` as an alias for the existing `antigravity` provider id
+- Added `artifacts/implementation-prompt.md` to the standard DMP handoff pack
+- Stopped installing `GEMINI.md` into target repositories
+- Switched Antigravity CLI installs from plugin skills to real workflow commands under `.agents/workflows/`
+
 ## 0.1.7
 
 - Added interactive agent selection during install

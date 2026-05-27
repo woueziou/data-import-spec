@@ -113,6 +113,7 @@ cat > "$WORKFLOW_DIR/context.md" <<EOF
 - Cadence: unknown
 - Sensitivity: unknown
 - Preferred example language: Python (default until changed)
+- Preferred parser packages/libraries: unknown
 - Downstream consumers: unknown
 - Current step: intake
 
@@ -145,6 +146,7 @@ parser with minimal guessing.
 - Is there a stable sample file?
 - Are there naming or schema conventions that must be preserved?
 - Which language should illustrative examples use, if not Python?
+- Are there preferred parser packages or libraries that must be used later?
 EOF
 
 cat > "$WORKFLOW_DIR/searches.md" <<EOF
@@ -178,6 +180,7 @@ cat > "$WORKFLOW_DIR/tasks.md" <<EOF
 - [ ] Save a representative sample path in \`context.md\`
 - [ ] Capture schema and naming preferences during intake
 - [ ] Confirm the preferred language for illustrative examples, or keep the Python default
+- [ ] Ask whether the user wants specific parser packages or libraries used later
 - [ ] Run \`/dmp-discover\` and record findings in \`searches.md\`
 - [ ] Produce a source catalog and file analysis report
 - [ ] Define the provisional schema and data model
@@ -191,6 +194,7 @@ cat > "$WORKFLOW_DIR/tasks.md" <<EOF
 - [ ] Write \`artifacts/dos-and-donts.md\`
 - [ ] Write \`artifacts/edge-cases-and-risk-matrix.md\`
 - [ ] Write \`artifacts/implementation-roadmap.md\`
+- [ ] Write \`artifacts/implementation-prompt.md\`
 - [ ] Define drift detection, schema versioning, and validation rules
 - [ ] Define consumer requirements and implementation gaps
 - [ ] Record why every code example is illustrative only
@@ -205,6 +209,7 @@ cat > "$WORKFLOW_DIR/decisions.md" <<EOF
 - Record parser, schema, naming, and quality decisions here.
 - Record any intake-time preferences that constrain schema design.
 - Record example-language decisions and whether Python defaulting was used.
+- Record preferred parser packages or libraries captured during intake.
 - Record any request for follow-on implementation outside the DMP workflow.
 
 ## Rejected options
@@ -221,7 +226,7 @@ Run \`/dmp-intake\`.
 
 1. Confirm the exact target file or location.
 2. Confirm the representative sample path.
-3. Capture any schema, naming, or example-language preferences in \`context.md\` and \`decisions.md\`.
+3. Capture any schema, naming, example-language, or preferred package/library preferences in \`context.md\` and \`decisions.md\`.
 4. Update \`context.md\` with the source details.
 5. Add any raw inspection evidence to \`searches.md\`.
 6. Move the workflow forward to \`/dmp-discover\`.
@@ -251,6 +256,7 @@ migration files here. They belong outside the DMP workflow.
 6. `dos-and-donts.md` — implementation guidance and anti-patterns
 7. `edge-cases-and-risk-matrix.md` — pitfalls, risks, and mitigations
 8. `implementation-roadmap.md` — build order, checkpoints, and validation milestones
+9. `implementation-prompt.md` — reusable prompt for a separate parser implementation phase
 
 ## Example policy
 

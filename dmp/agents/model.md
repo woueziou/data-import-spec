@@ -43,6 +43,9 @@ The artifact contract should capture:
 - the expected structure of each artifact
 - how evidence, confidence, and open questions are recorded
 - the example language requirement: user-requested language or Python by default
+- any preferred parser packages or libraries captured during intake
+- the implementation-prompt artifact that instructs a future LLM or developer
+  to use the rest of the artifact pack as the source of truth
 
 The examples pack should capture:
 - non-production example snippets only

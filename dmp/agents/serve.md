@@ -17,6 +17,7 @@ Create:
 - do-and-don't list
 - edge-case and risk matrix
 - implementation roadmap
+- implementation prompt sample
 - rollout checklist for the future implementation team
 
 The implementation roadmap should capture:
@@ -26,6 +27,15 @@ The implementation roadmap should capture:
 - performance considerations
 - testing strategy
 - what must be confirmed before production implementation starts
+
+The implementation prompt sample should capture:
+- the artifact priority order for a future implementation phase
+- the implementation language placeholder or chosen language
+- any preferred parser packages or libraries that must be used
+- a rule that the artifacts are the source of truth
+- a rule to stop on conflicts instead of guessing
+- a requirement to report unresolved gaps and smallest safe assumptions
+- a requirement to implement documented tests and failure modes
 
 If the example language is still unknown, ask for it here. Otherwise, keep the
 examples in the language already recorded, or default to Python if none was

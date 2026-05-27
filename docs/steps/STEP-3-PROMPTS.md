@@ -87,6 +87,7 @@ Generate an artifact pack outline that includes:
 4. Where confidence, anomalies, and open questions should be recorded
 5. Which artifact should hold illustrative examples
 6. Which artifact should hold the implementation roadmap
+7. Which artifact should hold the implementation prompt for a future LLM or developer
 
 Do not generate executable code.
 ```

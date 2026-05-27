@@ -20,8 +20,12 @@ const providerCatalog = [
   { id: 'gemini', label: 'Gemini CLI', path: '.gemini/commands/' },
   { id: 'claude', label: 'Claude/cmd', path: '.claude/commands/' },
   { id: 'kilo', label: 'Kilo', path: '.kilo/skills/' },
-  { id: 'antigravity', label: 'Antigravity', path: '.agents/plugins/dmp/' },
+  { id: 'antigravity', label: 'Antigravity CLI', path: '.agents/workflows/' },
 ];
+
+const providerAliases = new Map([
+  ['agy', 'antigravity'],
+]);
 
 function parseArgs(argv) {
   let force = false;
@@ -138,7 +142,10 @@ function normalizeProviders(input) {
     .split(',')
     .map((part) => part.trim().toLowerCase())
     .filter(Boolean)
-    .map((part) => indexMap.get(part) || part)
+    .map((part) => {
+      const normalized = indexMap.get(part) || part;
+      return providerAliases.get(normalized) || normalized;
+    })
     .filter((part) => allowed.has(part));
 
   if (selected.length === 0) {

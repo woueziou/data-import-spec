@@ -6,6 +6,10 @@ You now have enough information to design how an implementation team should
 turn the artifacts into a parser. The goal is a roadmap that is faithful to
 the data, usable by consumers, and flexible enough to evolve.
 
+This is also the step where you prepare the reusable implementation prompt
+that another LLM or developer can use to turn the artifact pack into code in a
+separate phase.
+
 ## Why it matters
 
 Early implementation decisions are hard to undo. Getting the build order,
@@ -45,6 +49,7 @@ Add checkpoints for:
 - An implementation roadmap with stages and milestones
 - A cross-reference of artifacts to implementation tasks
 - Validation checkpoints and go/no-go criteria
+- A reusable implementation prompt that treats the artifact pack as the source of truth
 - A brief justification for each major design decision
 
 Do not generate executable code in this step.

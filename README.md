@@ -35,6 +35,7 @@ The final handoff should include:
 - `artifacts/dos-and-donts.md`
 - `artifacts/edge-cases-and-risk-matrix.md`
 - `artifacts/implementation-roadmap.md`
+- `artifacts/implementation-prompt.md`
 
 When examples are needed, use the user-requested language. If none is given,
 default to Python and state that default explicitly.
@@ -79,6 +80,7 @@ Supported provider IDs:
 - `claude`
 - `kilo`
 - `antigravity`
+- `agy` (alias for `antigravity`)
 
 You can also select them non-interactively:
 
@@ -90,7 +92,7 @@ npx @petadata/parser@latest \
 ```
 
 If the target repo already contains installed DMP files such as
-`dmp/AGENTS.md` or `GEMINI.md`, re-run with `--force` or merge manually.
+`dmp/AGENTS.md`, re-run with `--force` or merge manually.
 
 ### What gets installed
 
@@ -105,13 +107,16 @@ Always installed:
 - `dmp/install.json`
 
 Installed only when the corresponding provider is selected:
-- `GEMINI.md`
 - `.github/agents/`
 - `.gemini/commands/`
 - `.claude/commands/`
 - `.kilo/skills/`
-- `.agents/plugins/dmp/`
+- `.agents/workflows/`
 `_dmp_output/` is created on first use of `/dmp-intake`.
+
+For a manual global Antigravity CLI install, copy the command markdown files
+from `_agents/workflows/` into
+`~/.gemini/antigravity/global_workflows/`.
 
 ## How To Use
 
@@ -130,6 +135,7 @@ Intake should capture:
 - sample file path
 - naming and schema preferences
 - preferred language for illustrative examples, or default to Python
+- preferred parser packages or libraries, if the user already has them in mind
 
 ### 2. Let the workflow create state
 
@@ -193,6 +199,7 @@ Start with:
 6. `dos-and-donts.md`
 7. `edge-cases-and-risk-matrix.md`
 8. `implementation-roadmap.md`
+9. `implementation-prompt.md`
 
 The final handoff is an implementation roadmap and artifact pack, not a parser
 implementation.

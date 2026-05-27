@@ -18,6 +18,7 @@ Then ask for any schema-shaping preferences that should be honored later, such a
 - timestamp/date format expectations
 - ID/key naming style
 - preferred language for illustrative examples
+- preferred parser packages or libraries, such as date handling or CSV libraries
 
 If I do not specify an example language, note that Python will be used by default.
 ```
@@ -39,6 +40,7 @@ Create a short intake note with:
 - sample path
 - schema preferences
 - preferred example language
+- preferred parser packages or libraries
 - risks
 - next agent to run
 ```
@@ -57,6 +59,7 @@ Return:
 - source type
 - schema preferences
 - preferred example language
+- preferred parser packages or libraries
 - known constraints
 - missing info
 - next step

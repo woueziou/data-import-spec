@@ -56,6 +56,7 @@ Capture preferences such as:
 - ID/key naming style
 - schema grouping or layer expectations
 - preferred language for illustrative examples
+- preferred parser packages or libraries, such as date/time or CSV handling utilities
 
 Record those decisions in `_dmp_output/<workflow-id>/context.md` and
 `decisions.md` so `/dmp-model` can use them as constraints.
@@ -90,6 +91,7 @@ Required handoff artifacts:
 - `artifacts/dos-and-donts.md`
 - `artifacts/edge-cases-and-risk-matrix.md`
 - `artifacts/implementation-roadmap.md`
+- `artifacts/implementation-prompt.md`
 
 Do not emit SQL, migrations, or runnable parser modules in workflow artifacts.
 If the user later wants implementation, treat that as work outside the DMP
@@ -103,7 +105,8 @@ When drift, ambiguity, or a new source appears, go back to the earliest relevant
 
 - Copilot: `.github/agents/dmp-*.agent.md`
 - Gemini CLI: `.gemini/commands/dmp-*.toml`
-- Antigravity source: `_agents/plugins/dmp/skills/dmp-*/SKILL.md`
-- Antigravity install target: `.agents/plugins/dmp/skills/dmp-*/SKILL.md`
+- Antigravity source: `_agents/workflows/dmp-*.md`
+- Antigravity workspace install target: `.agents/workflows/dmp-*.md`
+- Antigravity global install target: `~/.gemini/antigravity/global_workflows/dmp-*.md`
 - Kilo: `.kilo/skills/dmp-*/SKILL.md`
 - cmd: `.claude/commands/dmp-*.md`
