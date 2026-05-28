@@ -7,6 +7,7 @@
 | Agent | Command | Job |
 |---|---|---|
 | Pathfinder | `/dmp-intake` | Ask for the target path/location, source basics, constraints, and example-language preference |
+| Inquisitor | `/dmp-ask` | Ask the user for domain context, industry, purpose, file observations, and documentation sources (optional step) |
 | Cataloger | `/dmp-discover` | Cover steps 1-2: source inventory, profiling, file-name analysis, data nature, and profile reports |
 | Mapper | `/dmp-model` | Cover steps 3-7: schema, entities, parsing strategy, canonical rules, data dictionary, and artifact specs |
 | Sentinel | `/dmp-guard` | Cover steps 8-9 and 11: drift, consumer validation, quality rules, risk notes, and validation specs |
