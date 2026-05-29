@@ -52,4 +52,4 @@ Write the current state into:
 Core rule:
 - this workflow produces analysis artifacts only, not executable parser code
 
-Handoff: `dmp-discover`
+Handoff: `dmp-ask`
