@@ -18,9 +18,24 @@ If the user requests changes, update the affected artifacts and record the decis
 
 Do not validate, add quality rules, or assess risk — that is the Sentinel's job. Stay focused on user-facing model review and confirmation.
 
+
 Record all outcomes in:
-- `_dmp_output/<workflow-id>/decisions.md` — every keep, drop, merge, or reshape decision
-- `_dmp_output/<workflow-id>/context.md` — updated scope notes
-- `_dmp_output/<workflow-id>/tasks.md` — any follow-up tasks from user feedback
+- `_dmp_output/<workflow-id>/decisions.md` -- every keep, drop, merge, or reshape decision
+- `_dmp_output/<workflow-id>/context.md` -- updated scope notes
+- `_dmp_output/<workflow-id>/tasks.md` -- any follow-up tasks from user feedback
+
+## Collect Additional Guidelines
+
+After model review, ask the user if they want to propose any additional technical guidelines or instructions. These serve as a record of what was done and feed into the final implementation artifacts.
+
+If the user has guidelines to add, capture them as free-form notes covering things like:
+- implementation preferences or constraints not yet captured
+- how specific fields or entities should be handled
+- edge cases the user is aware of
+- business logic or transformation rules the user wants enforced
+- any other technical instructions that should be tracked
+
+Record guidelines in:
+- `_dmp_output/<workflow-id>/guidelines.md` -- append every guideline the user provides
 
 Handoff: `dmp-guard`
